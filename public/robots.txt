@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://gensangokart.com/sitemap-index.xml
