@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import BookingForm from '../components/booking/BookingForm.astro';
+import Footer from '../components/Footer.astro';
+
+const preselectedPackage = Astro.url.searchParams.get('package') ?? undefined;
+---
+
+<BaseLayout
+  title="Book Your Go-Kart Ride — GenSan GoKart"
+  description="Reserve your off-road go-kart slot in General Santos City. Family, barkada, and team building packages available. Easy online booking."
+>
+  <Nav />
+  <main id="main-content" class="pt-16">
+    <div class="min-h-screen bg-gradient-to-b from-[#1a0808] via-brand-dark to-brand-dark">
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 py-20">
+        <div class="text-center mb-10">
+          <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Lock In Your Slot</span>
+          <h1 class="font-display font-black text-brand-cream uppercase mt-2 text-5xl leading-none">
+            Book Your <span class="text-brand-yellow">Ride</span>
+          </h1>
+          <p class="text-brand-muted mt-3 text-sm">Fill in your details and we'll confirm your booking as soon as possible.</p>
+        </div>
+        <div class="bg-brand-red-dark/15 border border-brand-red/20 rounded-2xl p-6 sm:p-8">
+          <BookingForm preselectedPackage={preselectedPackage} inline />
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<script>
+  (window as any).fbq?.('track', 'InitiateCheckout');
+</script>

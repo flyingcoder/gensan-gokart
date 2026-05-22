@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog').catch(() => [])).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<BaseLayout
+  title="News & Announcements — GenSan GoKart"
+  description="Latest news, updates, and announcements from GenSan GoKart in General Santos City."
+>
+  <Nav />
+  <main id="main-content" class="pt-16">
+    <div class="bg-gradient-to-br from-brand-red-dark via-brand-dark to-[#1a0505] py-16 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto text-center">
+        <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Updates</span>
+        <h1 class="font-display font-black text-brand-cream uppercase mt-2 text-5xl leading-none">
+          News &amp; <span class="text-brand-yellow">Announcements</span>
+        </h1>
+      </div>
+    </div>
+    <section class="bg-brand-dark py-16 px-4 sm:px-6 lg:px-8" aria-label="Blog posts">
+      <div class="max-w-4xl mx-auto">
+        {posts.length === 0 ? (
+          <div class="text-center py-16">
+            <p class="text-brand-muted text-lg">No posts yet. Check back soon!</p>
+            <a href="https://www.facebook.com/gensangokart" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block text-action-blue hover:underline">Follow us on Facebook for updates</a>
+          </div>
+        ) : (
+          <ul class="space-y-6" role="list">
+            {posts.map((post) => (
+              <li>
+                <article class="bg-brand-red-dark/15 border border-brand-red/20 hover:border-brand-orange/40 rounded-2xl p-6 transition-colors">
+                  <p class="text-brand-muted text-xs mb-2">{post.data.pubDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                  <h2 class="font-display font-bold text-brand-cream uppercase text-2xl leading-tight mb-2">
+                    <a href={`/blog/${post.slug}`} class="hover:text-brand-yellow transition-colors">{post.data.title}</a>
+                  </h2>
+                  <p class="text-brand-cream/60 text-sm leading-relaxed mb-4">{post.data.excerpt}</p>
+                  <a href={`/blog/${post.slug}`} class="text-action-blue hover:underline text-sm font-semibold">Read More →</a>
+                </article>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

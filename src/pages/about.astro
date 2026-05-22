@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="About the Experience — GenSan GoKart"
+  description="Discover what makes GenSan GoKart the premier off-road go-kart experience in General Santos City. Safe, thrilling, and open to all skill levels."
+>
+  <Nav />
+  <main id="main-content" class="pt-16">
+    <!-- Hero -->
+    <div class="bg-gradient-to-br from-brand-red-dark via-brand-dark to-[#1a0505] py-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto text-center">
+        <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Who We Are</span>
+        <h1 class="font-display font-black text-brand-cream uppercase mt-2 text-5xl md:text-6xl leading-none">
+          The <span class="text-brand-yellow">Experience</span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- Content sections -->
+    <div class="bg-brand-dark py-16 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto space-y-16">
+        <section aria-labelledby="off-road-heading">
+          <h2 id="off-road-heading" class="font-display font-black text-brand-yellow uppercase text-3xl leading-none mb-4">What Is Off-Road Go-Karting?</h2>
+          <p class="text-brand-cream/75 leading-relaxed">
+            Unlike traditional go-kart tracks, off-road go-karting puts you on a dirt track with real terrain — corners, loose gravel, dips, and natural obstacles. The karts are built for this: rugged, stable, and genuinely fast.
+          </p>
+          <p class="text-brand-cream/75 leading-relaxed mt-4">
+            At GenSan GoKart, we've designed a track that challenges beginners and satisfies experienced riders. Every lap is different. Every group brings different energy.
+          </p>
+        </section>
+
+        <section aria-labelledby="who-heading">
+          <h2 id="who-heading" class="font-display font-black text-brand-yellow uppercase text-3xl leading-none mb-6">Who It's For</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { icon: '👨‍👩‍👧‍👦', title: 'Families', desc: 'Safe, controlled, and fun for all ages. Kids love it. Parents love watching kids love it.' },
+              { icon: '🤝', title: 'Barkadas', desc: 'Turn your next get-together into a proper competition. Race hard, laugh harder.' },
+              { icon: '🏢', title: 'Teams', desc: "Corporate outings that don't feel like corporate outings. Real activity, real bonding." },
+            ].map(({ icon, title, desc }) => (
+              <div class="bg-brand-red-dark/15 border border-brand-red/20 rounded-xl p-5">
+                <div class="text-3xl mb-2">{icon}</div>
+                <h3 class="font-display font-bold text-brand-cream uppercase text-lg mb-1">{title}</h3>
+                <p class="text-brand-cream/60 text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="safety-heading">
+          <h2 id="safety-heading" class="font-display font-black text-brand-yellow uppercase text-3xl leading-none mb-4">Safety First, Always</h2>
+          <p class="text-brand-cream/75 leading-relaxed">
+            Every rider gets a full safety briefing before they touch the track. Helmets and gear are provided — non-negotiable. Our staff are trained, present, and watching every session.
+          </p>
+          <p class="text-brand-cream/75 leading-relaxed mt-4">
+            We built GenSan GoKart with one goal: to give you a genuinely thrilling experience that you walk away from safely, every time.
+          </p>
+        </section>
+
+        <div class="text-center pt-4">
+          <a
+            href="/booking"
+            class="inline-flex items-center bg-action-blue hover:bg-action-blue-hover text-white font-bold px-8 py-4 rounded-lg transition-colors text-lg"
+          >
+            Book Your Ride Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

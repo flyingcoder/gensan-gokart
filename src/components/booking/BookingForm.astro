@@ -1,0 +1,182 @@
+---
+interface Props {
+  preselectedPackage?: string;
+  inline?: boolean;
+}
+const { preselectedPackage, inline = false } = Astro.props;
+---
+
+<div class={inline ? '' : 'bg-gradient-to-b from-[#1a0808] to-brand-dark py-20 px-4 sm:px-6 lg:px-8'}>
+  <div class={inline ? '' : 'max-w-2xl mx-auto'}>
+    {!inline && (
+      <div class="text-center mb-10">
+        <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Ready to Ride?</span>
+        <h2 class="font-display font-black text-brand-cream uppercase mt-2 text-4xl md:text-5xl leading-none">
+          Book Your <span class="text-brand-yellow">Slot</span>
+        </h2>
+        <p class="text-brand-muted mt-2 text-sm">Fill in the form and we'll confirm your booking shortly.</p>
+      </div>
+    )}
+
+    <form
+      id="booking-form"
+      class="space-y-4"
+      novalidate
+    >
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="booking-name" class="block text-brand-cream/80 text-sm font-medium mb-1.5">
+            Full Name <span class="text-brand-orange" aria-label="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="booking-name"
+            name="name"
+            required
+            autocomplete="name"
+            placeholder="Juan dela Cruz"
+            class="w-full bg-brand-dark border border-brand-red/30 focus:border-action-blue text-brand-cream placeholder-brand-muted rounded-lg px-4 py-3 text-sm outline-none transition-colors"
+          />
+        </div>
+        <div>
+          <label for="booking-phone" class="block text-brand-cream/80 text-sm font-medium mb-1.5">
+            Phone / Messenger <span class="text-brand-orange" aria-label="required">*</span>
+          </label>
+          <input
+            type="tel"
+            id="booking-phone"
+            name="phone"
+            required
+            autocomplete="tel"
+            placeholder="09XX XXX XXXX"
+            class="w-full bg-brand-dark border border-brand-red/30 focus:border-action-blue text-brand-cream placeholder-brand-muted rounded-lg px-4 py-3 text-sm outline-none transition-colors"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="booking-date" class="block text-brand-cream/80 text-sm font-medium mb-1.5">
+            Preferred Date
+          </label>
+          <input
+            type="date"
+            id="booking-date"
+            name="preferred_date"
+            min={new Date().toISOString().split('T')[0]}
+            class="w-full bg-brand-dark border border-brand-red/30 focus:border-action-blue text-brand-cream rounded-lg px-4 py-3 text-sm outline-none transition-colors"
+          />
+        </div>
+        <div>
+          <label for="booking-riders" class="block text-brand-cream/80 text-sm font-medium mb-1.5">
+            Number of Riders
+          </label>
+          <input
+            type="number"
+            id="booking-riders"
+            name="riders"
+            min="1"
+            max="50"
+            placeholder="e.g. 4"
+            class="w-full bg-brand-dark border border-brand-red/30 focus:border-action-blue text-brand-cream placeholder-brand-muted rounded-lg px-4 py-3 text-sm outline-none transition-colors"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="booking-package" class="block text-brand-cream/80 text-sm font-medium mb-1.5">
+          Package
+        </label>
+        <select
+          id="booking-package"
+          name="package"
+          class="w-full bg-brand-dark border border-brand-red/30 focus:border-action-blue text-brand-cream rounded-lg px-4 py-3 text-sm outline-none transition-colors appearance-none"
+        >
+          <option value="">— Select a package —</option>
+          <option value="family" selected={preselectedPackage === 'family'}>Family Package (3–6 pax)</option>
+          <option value="barkadahan" selected={preselectedPackage === 'barkadahan'}>Barkadahan Package (7–10 pax)</option>
+          <option value="team-building" selected={preselectedPackage === 'team-building'}>Team Building (10+ pax)</option>
+          <option value="walk-in">Walk-in / Not sure yet</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="booking-notes" class="block text-brand-cream/80 text-sm font-medium mb-1.5">
+          Additional Notes
+        </label>
+        <textarea
+          id="booking-notes"
+          name="notes"
+          rows="3"
+          placeholder="Any special requests, questions, or info about your group..."
+          class="w-full bg-brand-dark border border-brand-red/30 focus:border-action-blue text-brand-cream placeholder-brand-muted rounded-lg px-4 py-3 text-sm outline-none transition-colors resize-none"
+        ></textarea>
+      </div>
+
+      <!-- Status messages -->
+      <div id="form-success" class="hidden bg-green-900/40 border border-green-500/40 text-green-300 rounded-lg px-4 py-3 text-sm" role="alert">
+        ✅ Booking request received! We'll reach out to confirm your slot shortly.
+      </div>
+      <div id="form-error" class="hidden bg-red-900/40 border border-red-500/40 text-red-300 rounded-lg px-4 py-3 text-sm" role="alert">
+        Something went wrong. Please try again or message us on Facebook.
+      </div>
+
+      <button
+        type="submit"
+        id="form-submit"
+        class="w-full bg-action-blue hover:bg-action-blue-hover text-white font-bold py-4 rounded-lg transition-colors duration-150 text-base shadow-[0_0_20px_rgba(31,169,255,0.2)]"
+      >
+        Reserve My Slot
+      </button>
+
+      <p class="text-center text-brand-muted text-xs">
+        Or message us directly on
+        <a href="https://m.me/gensangokart" class="text-action-blue hover:underline" target="_blank" rel="noopener noreferrer">Messenger</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('booking-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('form-submit') as HTMLButtonElement | null;
+  const successEl = document.getElementById('form-success');
+  const errorEl = document.getElementById('form-error');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    submitBtn!.disabled = true;
+    submitBtn!.textContent = 'Sending…';
+    successEl?.classList.add('hidden');
+    errorEl?.classList.add('hidden');
+
+    const data = Object.fromEntries(new FormData(form));
+
+    try {
+      const res = await fetch('/.netlify/functions/submit-booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        successEl?.classList.remove('hidden');
+        form.reset();
+        (window as any).gtag?.('event', 'form_submission', { form: 'booking' });
+        (window as any).fbq?.('track', 'Lead');
+      } else {
+        errorEl?.classList.remove('hidden');
+      }
+    } catch {
+      errorEl?.classList.remove('hidden');
+    } finally {
+      submitBtn!.disabled = false;
+      submitBtn!.textContent = 'Reserve My Slot';
+    }
+  });
+</script>

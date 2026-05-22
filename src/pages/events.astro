@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Upcoming Events — GenSan GoKart"
+  description="Stay tuned for upcoming races, private events, and special challenges at GenSan GoKart in General Santos City."
+>
+  <Nav />
+  <main id="main-content" class="pt-16">
+    <div class="min-h-screen bg-gradient-to-b from-[#1a0808] to-brand-dark flex items-center">
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 py-24 text-center">
+        <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Coming Soon</span>
+        <h1 class="font-display font-black text-brand-cream uppercase mt-2 text-5xl md:text-6xl leading-none">
+          Events &amp; <span class="text-brand-yellow">Races</span>
+        </h1>
+        <p class="text-brand-cream/65 mt-6 text-lg leading-relaxed">
+          We're cooking up some big events — community races, time-trial challenges, and private bookings for special occasions. Be the first to know when slots open.
+        </p>
+
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="https://www.facebook.com/gensangokart"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-2 bg-action-blue hover:bg-action-blue-hover text-white font-bold px-6 py-3 rounded-lg transition-colors"
+          >
+            Follow on Facebook
+          </a>
+          <a
+            href="/contact"
+            class="inline-flex items-center justify-center border-2 border-brand-cream/30 hover:border-brand-yellow text-brand-cream hover:text-brand-yellow font-semibold px-6 py-3 rounded-lg transition-colors"
+          >
+            Inquire About Private Events
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

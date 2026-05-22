@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const packages = [
+  {
+    id: 'family',
+    label: 'Family Package',
+    pax: '3–6 pax',
+    tagline: 'Perfect for a family day-out',
+    desc: 'Bring the whole family for a safe, exciting, and unforgettable off-road experience. Designed for all skill levels — from kids to grandparents.',
+    inclusions: [
+      'Go-kart rides for the whole group',
+      'Safety briefing and helmet for each rider',
+      'Full protective gear provided',
+      'Dedicated track time',
+      'Staff assistance throughout',
+    ],
+  },
+  {
+    id: 'barkadahan',
+    label: 'Barkadahan Package',
+    pax: '7–10 pax',
+    tagline: 'Race your whole squad',
+    desc: 'Challenge your friends to an off-road showdown. Mini race format included — find out once and for all who's the fastest in your barkada.',
+    inclusions: [
+      'Group ride-outs with race format',
+      'Mini tournament bracket',
+      'Safety gear for all riders',
+      'Cheering and trash-talk fully supported',
+      'Group photo opportunity',
+    ],
+  },
+  {
+    id: 'team-building',
+    label: 'Team Building Package',
+    pax: '10+ pax',
+    tagline: 'Corporate and company events',
+    desc: 'Make your company outing one your team will actually remember. Competitive and cooperative race formats available. We handle the track, you bring the energy.',
+    inclusions: [
+      'Dedicated private track slot',
+      'Team vs. team race format',
+      'Customizable program and schedule',
+      'Safety briefing and full gear',
+      'Corporate-friendly environment',
+      'Option for certificates / recognition',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Packages & Pricing — GenSan GoKart"
+  description="Choose from Family, Barkadahan, or Team Building go-kart packages in General Santos City. Competitive prices, full safety gear included."
+>
+  <Nav />
+  <main id="main-content" class="pt-16">
+    <!-- Hero banner -->
+    <div class="bg-gradient-to-br from-brand-red-dark via-brand-dark to-[#1a0505] py-20 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto text-center">
+        <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Pricing & Inclusions</span>
+        <h1 class="font-display font-black text-brand-cream uppercase mt-2 text-5xl md:text-6xl leading-none">
+          Our <span class="text-brand-yellow">Packages</span>
+        </h1>
+        <p class="text-brand-cream/65 mt-4 text-lg max-w-2xl mx-auto">From family rides to corporate race-offs — we've got the right package for your group.</p>
+      </div>
+    </div>
+
+    <!-- Full package cards -->
+    <section class="bg-brand-dark py-20 px-4 sm:px-6 lg:px-8" aria-label="Package details">
+      <div class="max-w-7xl mx-auto space-y-8">
+        {packages.map(({ id, label, pax, tagline, desc, inclusions }) => (
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-0 bg-brand-red-dark/15 border border-brand-red/20 rounded-2xl overflow-hidden">
+            <div class="md:col-span-2 p-8">
+              <p class="text-brand-orange text-xs font-semibold uppercase tracking-widest mb-1">{pax}</p>
+              <h2 class="font-display font-black text-brand-cream uppercase text-3xl leading-tight mb-2">{label}</h2>
+              <p class="text-brand-yellow font-medium mb-4">{tagline}</p>
+              <p class="text-brand-cream/65 text-sm leading-relaxed mb-6">{desc}</p>
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {inclusions.map((item) => (
+                  <li class="flex items-start gap-2 text-sm text-brand-cream/75">
+                    <svg class="w-4 h-4 text-brand-orange flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="flex flex-col justify-center items-center p-8 bg-brand-dark/50 gap-4">
+              <a
+                href={`/booking?package=${id}`}
+                class="w-full text-center bg-action-blue hover:bg-action-blue-hover text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                onclick={`gtag?.('event','reserve_package_click',{package:'${id}',location:'packages_page'}); fbq?.('track','InitiateCheckout');`}
+              >
+                Reserve This Package
+              </a>
+              <a href="/contact" class="text-brand-muted hover:text-brand-cream text-sm transition-colors text-center">
+                Have questions? Contact us →
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

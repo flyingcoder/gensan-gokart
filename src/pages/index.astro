@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/hero/Hero.astro';
+import ExperiencePreview from '../components/experience/ExperiencePreview.astro';
+import PackagesPreview from '../components/packages/PackagesPreview.astro';
+import FAQ from '../components/faq/FAQ.astro';
+import BookingForm from '../components/booking/BookingForm.astro';
+import Footer from '../components/Footer.astro';
+
+import { getCollection } from 'astro:content';
+const posts = await getCollection('blog').catch(() => []);
+const latestPost = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())[0];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    { '@type': 'Question', name: 'Is go-karting safe?', acceptedAnswer: { '@type': 'Answer', text: 'All riders receive a safety briefing before every session. Helmets and protective gear are provided.' } },
+    { '@type': 'Question', name: 'Is it beginner-friendly?', acceptedAnswer: { '@type': 'Answer', text: 'Yes! No prior experience needed. Our staff guide you through everything.' } },
+    { '@type': 'Question', name: 'What should riders wear?', acceptedAnswer: { '@type': 'Answer', text: 'Comfortable clothing and closed-toe shoes are required. Long pants recommended.' } },
+    { '@type': 'Question', name: 'Is booking required?', acceptedAnswer: { '@type': 'Answer', text: 'Booking is strongly recommended, especially on weekends.' } },
+    { '@type': 'Question', name: 'Are there age requirements?', acceptedAnswer: { '@type': 'Answer', text: 'Riders must be at least 5 years old. Children under 12 need an adult.' } },
+  ],
+};
+---
+
+<BaseLayout>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} slot="head" />
+  <Nav />
+  <main id="main-content">
+    <Hero />
+    <ExperiencePreview />
+    <PackagesPreview />
+
+    {latestPost && (
+      <section class="bg-brand-dark py-16 px-4 sm:px-6 lg:px-8" aria-labelledby="announcement-heading">
+        <div class="max-w-4xl mx-auto">
+          <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Latest Announcement</span>
+          <div class="mt-4 flex flex-col md:flex-row gap-6 bg-brand-red-dark/20 border border-brand-red/20 rounded-2xl overflow-hidden">
+            <div class="p-6 flex-1">
+              <p class="text-brand-muted text-xs mb-2">{latestPost.data.pubDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              <h2 id="announcement-heading" class="font-display font-bold text-brand-cream text-2xl uppercase leading-tight mb-2">{latestPost.data.title}</h2>
+              <p class="text-brand-cream/65 text-sm leading-relaxed mb-4">{latestPost.data.excerpt}</p>
+              <a href={`/blog/${latestPost.slug}`} class="text-action-blue hover:underline text-sm font-semibold">Read More →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <FAQ />
+
+    <section class="bg-gradient-to-b from-brand-dark to-[#1a0808] py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="booking-form-heading">
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-10">
+          <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Ready to Ride?</span>
+          <h2 id="booking-form-heading" class="font-display font-black text-brand-cream uppercase mt-2 text-4xl md:text-5xl leading-none">
+            Book Your <span class="text-brand-yellow">Slot</span>
+          </h2>
+          <p class="text-brand-muted mt-2 text-sm">Fill in the form and we'll confirm your booking shortly.</p>
+        </div>
+        <BookingForm inline />
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

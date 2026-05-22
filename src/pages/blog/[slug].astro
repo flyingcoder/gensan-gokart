@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog').catch(() => []);
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+
+<BaseLayout title={`${post.data.title} — GenSan GoKart`} description={post.data.excerpt}>
+  <Nav />
+  <main id="main-content" class="pt-16">
+    <article class="bg-brand-dark min-h-screen py-16 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto">
+        <p class="text-brand-muted text-xs mb-4">
+          {post.data.pubDate.toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" })}
+        </p>
+        <h1 class="font-display font-black text-brand-cream uppercase text-4xl md:text-5xl leading-none mb-8">{post.data.title}</h1>
+        <div class="prose prose-invert prose-sm max-w-none text-brand-cream/75">
+          <Content />
+        </div>
+        <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center border-t border-brand-red/20 pt-10">
+          <a href="/booking" class="inline-flex justify-center items-center bg-action-blue hover:bg-action-blue-hover text-white font-bold px-8 py-3 rounded-lg transition-colors">Book Now</a>
+          <a href="/packages" class="inline-flex justify-center items-center border-2 border-brand-yellow/50 hover:border-brand-yellow text-brand-yellow font-semibold px-8 py-3 rounded-lg transition-colors">View Packages</a>
+        </div>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
