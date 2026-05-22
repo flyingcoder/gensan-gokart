@@ -2,79 +2,231 @@
 ---
 
 <section
-  class="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-dark"
+  class="hero-section relative min-h-screen flex items-center overflow-hidden bg-brand-dark"
   aria-labelledby="hero-heading"
 >
   <!-- Atmospheric background -->
   <div class="absolute inset-0" aria-hidden="true">
+    <!-- Base gradient -->
     <div class="absolute inset-0 bg-gradient-to-br from-brand-red-dark via-brand-dark to-[#1a0505]"></div>
-    <!-- Decorative track lines -->
-    <div class="absolute inset-0 opacity-10"
-      style="background-image: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,105,26,0.3) 40px, rgba(255,105,26,0.3) 41px);">
+
+    <!-- Diagonal speed hatching -->
+    <div class="absolute inset-0 opacity-[0.12]"
+      style="background-image: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,105,26,0.45) 40px, rgba(255,105,26,0.45) 41px);">
     </div>
-    <!-- Glow burst -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-20"
-      style="background: radial-gradient(circle, #FF6A1A 0%, #A80E0E 40%, transparent 70%);">
+
+    <!-- Secondary horizontal speed streaks -->
+    <div class="absolute inset-0 opacity-[0.06]"
+      style="background-image: repeating-linear-gradient(90deg, transparent, transparent 120px, rgba(255,201,40,0.5) 120px, rgba(255,201,40,0.5) 121px);">
+    </div>
+
+    <!-- Primary radial glow burst (orange/red, off-center right) -->
+    <div class="hero-glow-primary absolute top-1/2 right-[15%] -translate-y-1/2 w-[1100px] h-[1100px] rounded-full"
+      style="background: radial-gradient(circle, rgba(255,106,26,0.55) 0%, rgba(168,14,14,0.35) 30%, rgba(126,10,10,0.15) 55%, transparent 75%); filter: blur(2px);">
+    </div>
+
+    <!-- Secondary radial glow (yellow, behind headline) -->
+    <div class="hero-glow-secondary absolute top-[40%] left-[20%] -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-30"
+      style="background: radial-gradient(circle, rgba(255,201,40,0.6) 0%, rgba(255,106,26,0.2) 40%, transparent 70%);">
+    </div>
+
+    <!-- Vignette to anchor edges -->
+    <div class="absolute inset-0"
+      style="background: radial-gradient(ellipse at center, transparent 40%, rgba(42,18,13,0.7) 100%);">
+    </div>
+
+    <!-- Floating particle dots (pure CSS) -->
+    <div class="hero-particles absolute inset-0 pointer-events-none">
+      <span class="particle particle--1"></span>
+      <span class="particle particle--2"></span>
+      <span class="particle particle--3"></span>
+      <span class="particle particle--4"></span>
+      <span class="particle particle--5"></span>
+      <span class="particle particle--6"></span>
+      <span class="particle particle--7"></span>
+      <span class="particle particle--8"></span>
+      <span class="particle particle--9"></span>
+      <span class="particle particle--10"></span>
+      <span class="particle particle--11"></span>
+      <span class="particle particle--12"></span>
+      <span class="particle particle--13"></span>
+      <span class="particle particle--14"></span>
+      <span class="particle particle--15"></span>
     </div>
   </div>
+
 
   <!-- Content -->
   <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 pb-16">
-    <!-- Badge -->
-    <div class="inline-flex items-center gap-2 bg-brand-red/30 border border-brand-orange/30 rounded-full px-4 py-1.5 mb-6">
-      <span class="inline-block w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
-      <span class="text-brand-orange font-semibold text-sm tracking-wide uppercase">General Santos City</span>
-    </div>
+    <div>
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 bg-brand-red/30 border border-brand-orange/30 rounded-full px-4 py-1.5 mb-6 backdrop-blur-sm">
+        <span class="inline-block w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+        <span class="text-brand-orange font-semibold text-sm tracking-wide uppercase">General Santos City</span>
+      </div>
 
-    <!-- Headline -->
-    <h1
-      id="hero-heading"
-      class="font-display font-black uppercase text-brand-cream leading-none mb-4"
-      style="font-size: var(--text-hero);"
-    >
-      General Santos'<br />
-      <span class="text-brand-yellow" style="text-shadow: 0 0 40px rgba(255,201,40,0.4);">
-        Wildest Off-Road
-      </span><br />
-      Go-Kart Track
-    </h1>
-
-    <p class="text-brand-cream/75 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-      Dirt. Speed. Adrenaline. Built for families, barkada trips, and team challenges.
-      No experience needed — just the guts to ride.
-    </p>
-
-    <!-- CTAs -->
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a
-        href="/booking"
-        class="inline-flex items-center justify-center gap-2 bg-action-blue hover:bg-action-blue-hover text-white font-bold text-lg px-8 py-4 rounded transition-all duration-150 shadow-[0_0_30px_rgba(31,169,255,0.3)] hover:shadow-[0_0_40px_rgba(31,169,255,0.5)]"
-        onclick="gtag?.('event','book_now_click',{location:'hero'})"
+      <!-- Headline -->
+      <h1
+        id="hero-heading"
+        class="font-display font-black uppercase text-brand-cream leading-none mb-4"
+        style="font-size: var(--text-hero);"
       >
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-        </svg>
-        Book Your Ride
-      </a>
-      <a
-        href="/packages"
-        class="inline-flex items-center justify-center gap-2 border-2 border-brand-yellow/50 hover:border-brand-yellow text-brand-yellow font-bold text-lg px-8 py-4 rounded transition-colors duration-150"
-        onclick="gtag?.('event','view_packages_click',{location:'hero'})"
-      >
-        View Promos
-      </a>
-    </div>
+        General Santos'<br />
+        <span class="text-brand-yellow" style="text-shadow: 0 0 40px rgba(255,201,40,0.45), 0 0 80px rgba(255,106,26,0.25);">
+          Wildest Off-Road
+        </span><br />
+        Go-Kart Track
+      </h1>
 
-    <!-- Social proof -->
-    <p class="mt-8 text-brand-muted text-sm">
-      Join hundreds of riders in GenSan's #1 off-road go-kart experience
-    </p>
+      <p class="text-brand-cream/75 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+        Dirt. Speed. Adrenaline. Built for families, barkada trips, and team challenges.
+        No experience needed — just the guts to ride.
+      </p>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/booking"
+          class="inline-flex items-center justify-center gap-2 bg-action-blue hover:bg-action-blue-hover text-white font-bold text-lg px-8 py-4 rounded transition-all duration-150 shadow-[0_0_30px_rgba(31,169,255,0.3)] hover:shadow-[0_0_40px_rgba(31,169,255,0.5)]"
+          onclick="gtag?.('event','book_now_click',{location:'hero'})"
+        >
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          Book Your Ride
+        </a>
+        <a
+          href="/packages"
+          class="inline-flex items-center justify-center gap-2 border-2 border-brand-yellow/50 hover:border-brand-yellow text-brand-yellow font-bold text-lg px-8 py-4 rounded transition-colors duration-150"
+          onclick="gtag?.('event','view_packages_click',{location:'hero'})"
+        >
+          View Promos
+        </a>
+      </div>
+
+      <!-- Social proof -->
+      <p class="mt-8 text-white text-sm">
+        Join hundreds of riders in GenSan's #1 off-road go-kart experience
+      </p>
+    </div>
   </div>
 
   <!-- Scroll indicator -->
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" aria-hidden="true">
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-10" aria-hidden="true">
     <svg class="w-6 h-6 text-brand-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
     </svg>
   </div>
 </section>
+
+<style>
+  /* Radial glow gentle pulse */
+  .hero-glow-primary {
+    animation: glow-pulse 7s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+  .hero-glow-secondary {
+    animation: glow-pulse 9s ease-in-out infinite reverse;
+    will-change: transform, opacity;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.55; transform: translateY(-50%) scale(1); }
+    50%      { opacity: 0.75; transform: translateY(-50%) scale(1.06); }
+  }
+
+  /* SVG illustration: subtle drift */
+  .hero-illustration {
+    animation: kart-drift 6s ease-in-out infinite;
+    will-change: transform;
+  }
+  @keyframes kart-drift {
+    0%, 100% { transform: translateY(calc(-50% + 0px)); }
+    50%      { transform: translateY(calc(-50% - 8px)); }
+  }
+
+  /* Exhaust flame flicker */
+  .kart-flame {
+    transform-origin: 240px 390px;
+    animation: flame-flicker 0.18s steps(2, end) infinite;
+  }
+  @keyframes flame-flicker {
+    0%   { transform: scaleX(1) scaleY(1); opacity: 0.95; }
+    100% { transform: scaleX(1.18) scaleY(0.92); opacity: 0.75; }
+  }
+
+  /* Dust cloud breathing */
+  .kart-dust {
+    transform-origin: 180px 470px;
+    animation: dust-breathe 2.4s ease-in-out infinite;
+  }
+  @keyframes dust-breathe {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50%      { transform: scale(1.08); opacity: 0.65; }
+  }
+
+  /* Speed lines streak */
+  .kart-speedlines line {
+    animation: speed-streak 0.8s ease-out infinite;
+  }
+  .kart-speedlines line:nth-child(1) { animation-delay: 0s;    }
+  .kart-speedlines line:nth-child(2) { animation-delay: 0.12s; }
+  .kart-speedlines line:nth-child(3) { animation-delay: 0.24s; }
+  .kart-speedlines line:nth-child(4) { animation-delay: 0.36s; }
+  .kart-speedlines line:nth-child(5) { animation-delay: 0.48s; }
+  .kart-speedlines line:nth-child(6) { animation-delay: 0.60s; }
+  @keyframes speed-streak {
+    0%   { opacity: 0;   transform: translateX(20px); }
+    40%  { opacity: 0.9; transform: translateX(0); }
+    100% { opacity: 0;   transform: translateX(-30px); }
+  }
+
+  /* Floating particle dots */
+  .hero-particles { overflow: hidden; }
+  .particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: #FFC928;
+    box-shadow: 0 0 12px rgba(255, 201, 40, 0.85), 0 0 24px rgba(255, 106, 26, 0.45);
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  .particle--1  { left: 6%;  bottom: -10px; width: 4px; height: 4px; background: #FF6A1A; animation: particle-rise 11s linear  0.0s infinite; }
+  .particle--2  { left: 12%; bottom: -10px; width: 5px; height: 5px; animation: particle-rise 14s linear  1.2s infinite; }
+  .particle--3  { left: 18%; bottom: -10px; width: 3px; height: 3px; background: #FF6A1A; animation: particle-rise 9s  linear  2.0s infinite; }
+  .particle--4  { left: 26%; bottom: -10px; width: 6px; height: 6px; animation: particle-rise 16s linear  0.6s infinite; }
+  .particle--5  { left: 33%; bottom: -10px; width: 4px; height: 4px; background: #FFFFFF; animation: particle-rise 12s linear  3.0s infinite; }
+  .particle--6  { left: 41%; bottom: -10px; width: 5px; height: 5px; background: #FF6A1A; animation: particle-rise 13s linear  1.8s infinite; }
+  .particle--7  { left: 48%; bottom: -10px; width: 3px; height: 3px; animation: particle-rise 10s linear  4.2s infinite; }
+  .particle--8  { left: 55%; bottom: -10px; width: 7px; height: 7px; animation: particle-rise 17s linear  0.3s infinite; }
+  .particle--9  { left: 62%; bottom: -10px; width: 4px; height: 4px; background: #FF6A1A; animation: particle-rise 11s linear  2.5s infinite; }
+  .particle--10 { left: 69%; bottom: -10px; width: 5px; height: 5px; animation: particle-rise 15s linear  1.0s infinite; }
+  .particle--11 { left: 76%; bottom: -10px; width: 3px; height: 3px; animation: particle-rise 9s  linear  3.6s infinite; }
+  .particle--12 { left: 83%; bottom: -10px; width: 6px; height: 6px; background: #FF6A1A; animation: particle-rise 14s linear  0.9s infinite; }
+  .particle--13 { left: 90%; bottom: -10px; width: 4px; height: 4px; animation: particle-rise 12s linear  2.2s infinite; }
+  .particle--14 { left: 96%; bottom: -10px; width: 5px; height: 5px; animation: particle-rise 16s linear  4.0s infinite; }
+  .particle--15 { left: 3%;  bottom: -10px; width: 3px; height: 3px; background: #FF6A1A; animation: particle-rise 13s linear  1.4s infinite; }
+
+  @keyframes particle-rise {
+    0%   { transform: translate3d(0, 0, 0) scale(0.6);   opacity: 0; }
+    8%   { opacity: 0.9; }
+    50%  { transform: translate3d(20px, -50vh, 0) scale(1); opacity: 0.8; }
+    92%  { opacity: 0.5; }
+    100% { transform: translate3d(-10px, -110vh, 0) scale(0.8); opacity: 0; }
+  }
+
+  /* Reduced motion: kill atmospheric animation */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-glow-primary,
+    .hero-glow-secondary,
+    .hero-illustration,
+    .kart-flame,
+    .kart-dust,
+    .kart-speedlines line,
+    .particle {
+      animation: none !important;
+    }
+    .particle { opacity: 0.5; }
+  }
+</style>
