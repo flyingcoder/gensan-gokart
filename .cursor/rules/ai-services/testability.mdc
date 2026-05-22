@@ -1,0 +1,111 @@
+---
+description: Testability patterns - dependency injection, mocking, and test structure
+globs: ["apps/ai-services/**/*.py", "apps/ai-services/tests/**/*.py"]
+alwaysApply: true
+---
+
+# Testability Patterns
+
+Enforces testable code through dependency injection, clear interfaces, and comprehensive test coverage.
+
+## Core Principles
+
+### Principle 1: Dependency Injection
+
+**All dependencies injected via constructor:**
+
+**✅ Good:**
+```python
+class RAGService:
+    def __init__(
+        self,
+        embedding_service: EmbeddingService,
+        vector_store: VectorStoreAdapter,
+        llm_service: LLMService
+    ):
+        self.embedding_service = embedding_service
+        self.vector_store = vector_store
+        self.llm_service = llm_service
+
+# Testable - can inject mocks
+def test_semantic_search():
+    mock_embedding = Mock(EmbeddingService)
+    mock_vector_store = Mock(VectorStoreAdapter)
+    service = RAGService(embedding_service=mock_embedding, vector_store=mock_vector_store)
+    result = service.semantic_search("test query", "trace-123")
+    assert result is not None
+```
+
+**Rules:**
+- All dependencies injected via constructor
+- No hard-coded dependencies in services
+- Services depend on interfaces, not implementations
+- Dependencies can be easily mocked in tests
+
+### Principle 2: Interface-Based Design
+
+**Services depend on abstract interfaces:**
+
+**✅ Good:**
+```python
+class VectorStoreAdapter(ABC):
+    @abstractmethod
+    def semantic_search(self, query_embedding: List[float], trace_id: str) -> List[Dict]:
+        pass
+
+class SupabaseVectorStoreAdapter(VectorStoreAdapter):
+    def semantic_search(self, query_embedding, trace_id: str):
+        # Supabase-specific implementation
+        pass
+
+# Service depends on interface
+class RAGService:
+    def __init__(self, vector_store: VectorStoreAdapter):
+        self.vector_store = vector_store  # Interface, not implementation
+```
+
+**Rules:**
+- Define abstract interfaces for adapters
+- Services depend on interfaces
+- Implementations can be swapped
+- Tests use mock implementations
+
+### Principle 3: Test Structure
+
+**Tests follow clear structure and patterns:**
+
+**✅ Good:**
+```python
+class TestRAGService:
+    @pytest.fixture
+    def mock_embedding_service(self):
+        mock = Mock()
+        mock.generate_embedding.return_value = [0.1] * 1536
+        return mock
+    
+    @pytest.fixture
+    def rag_service(self, mock_embedding_service, mock_vector_store):
+        return RAGService(embedding_service=mock_embedding_service, vector_store=mock_vector_store)
+    
+    def test_semantic_search_success(self, rag_service):
+        result = rag_service.semantic_search(query="test query", trace_id="trace-123")
+        assert result is not None
+        rag_service.embedding_service.generate_embedding.assert_called_once()
+```
+
+**Rules:**
+- Tests use pytest fixtures for setup
+- Tests mock external dependencies
+- Tests verify behavior, not implementation
+- Tests check trace_id propagation
+- Tests are isolated and independent
+
+## Checklist
+
+Before finalizing code:
+- [ ] Dependencies injected via constructor
+- [ ] Services depend on interfaces
+- [ ] Interfaces defined for adapters
+- [ ] Tests use mocks for dependencies
+- [ ] Tests verify trace_id propagation
+- [ ] Tests are isolated and independent

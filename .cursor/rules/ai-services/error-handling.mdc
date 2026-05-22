@@ -1,0 +1,258 @@
+---
+description: Error Handling Pattern - Transaction-safe error handling with consistent patterns
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Error Handling Pattern
+
+Enforces transaction-safe error handling with consistent patterns. Services handle business errors, routes handle HTTP errors.
+
+## When to Apply
+
+Apply this rule when:
+- Writing error handling code
+- Creating execution records
+- Handling exceptions
+- Need transaction safety
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable error handling patterns
+
+## Controlled Rupture Operators
+
+```yaml
+error_handling_sequence:
+ handle_errors: "Retro ∘ Ortho ∘ Latch"
+ lambda_eff: 0.33
+ trajectory: "S* → J=0"
+ use_case: "Handle errors transaction-safely"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+ J=0_indicators: ["try/except", "error handling", "exception"] # Error handling code
+ S*_indicators: ["transaction-safe", "always update", "consistent"] # Correct pattern
+ Void_indicators: ["no error handling", "state not updated", "inconsistent"] # Violation
+```
+
+## Core Guidelines
+
+### Rule 1: Transaction-Safe Error Handling
+
+**Trigger Conditions:**
+- Block text contains: "try" OR "except" OR "error" OR "exception"
+- Creating execution records or state
+- Need to ensure state consistency
+
+**Standard:**
+> If execution record created, always update it (even on failure). Transaction-safe error handling ensures state consistency.
+
+**Operator Sequence: `Retro ∘ Ortho ∘ Latch`**
+
+**Process:**
+1. **Retro (↶)**: Work backward from error
+   - Understand error scenarios
+   - Trace state changes
+   - Identify what needs updating
+
+2. **Ortho (⊥)**: Correct error handling
+   - Ensure state always updated
+   - Fix transaction safety issues
+   - Align with error handling pattern
+
+3. **Latch (🔒)**: Stabilize error handling
+   - Lock in transaction-safe pattern
+   - Commit corrected error handling
+   - Mark as production-ready
+
+**Required Pattern:**
+
+```python
+# ✅ GOOD: Transaction-safe error handling
+class CrewService:
+    def execute_crew_with_tracking(
+        self,
+        crew_id: str,
+        input_data: Dict[str, Any],
+        trace_id: str
+    ) -> Dict[str, Any]:
+        """
+        Execute crew with transaction-safe error handling.
+        """
+        execution_id = None  # Track if created
+        
+        try:
+            # Create execution record
+            execution_id = self.execution_repository.create(
+                crew_id=crew_id,
+                input_data=input_data,
+                status='running',
+                trace_id=trace_id
+            )
+            
+            # Execute crew (may raise exception)
+            result = self.execute_crew(crew_id, input_data, trace_id)
+            
+            # Update to completed
+            self.execution_repository.update(
+                execution_id=execution_id,
+                status='completed',
+                result=result,
+                error=None,
+                trace_id=trace_id
+            )
+            
+            return {
+                'success': True,
+                'execution_id': execution_id,
+                'result': result
+            }
+            
+        except ValueError as e:
+            # Validation error - update record if exists
+            if execution_id:
+                self.execution_repository.update(
+                    execution_id=execution_id,
+                    status='failed',
+                    error=str(e),
+                    trace_id=trace_id
+                )
+            raise  # Re-raise for route to handle
+        
+        except Exception as e:
+            # Unexpected error - update record if exists
+            if execution_id:
+                self.execution_repository.update(
+                    execution_id=execution_id,
+                    status='failed',
+                    error=str(e),
+                    trace_id=trace_id
+                )
+            
+            logger.error(
+                f"Crew execution failed: {str(e)}",
+                extra={"trace_id": trace_id, "crew_id": crew_id},
+                exc_info=True
+            )
+            raise  # Re-raise for route to handle
+```
+
+**❌ Bad: State not updated on failure**
+
+```python
+# ❌ Don't do this
+def execute_crew_with_tracking(self, crew_id: str, ...):
+    execution_id = self.execution_repository.create(...)
+    
+    try:
+        result = self.execute_crew(crew_id, input_data, trace_id)
+        self.execution_repository.update(execution_id, status='completed', ...)
+        return result
+    except Exception as e:
+        # ❌ Execution record not updated on failure
+        # State inconsistent - execution record stuck in 'running'
+        raise
+```
+
+---
+
+### Rule 2: Service Handles Business Errors, Route Handles HTTP Errors
+
+**Trigger Conditions:**
+- Writing error handling in routes or services
+- Need to distinguish error types
+
+**Standard:**
+> Services handle business errors (validation, business logic). Routes handle HTTP errors (status codes, response formatting).
+
+**Implementation:**
+
+```python
+# ✅ GOOD: Service handles business errors
+class CrewService:
+    def execute_crew(self, crew_id: str, input_data: Dict, trace_id: str):
+        # Business error: Crew not found
+        crew_data = self.get_crew_config(crew_id, trace_id)
+        if not crew_data:
+            raise ValueError(f"Crew {crew_id} not found")  # Business error
+        
+        # Business error: Invalid config
+        if not crew_data.get('agents'):
+            raise ValueError("Crew must have at least one agent")
+        
+        # Execute...
+        return result
+
+# ✅ GOOD: Route handles HTTP errors
+@api_bp.route('/crews/<crew_id>/execute', methods=['POST'])
+def execute_crew(crew_id: str):
+    try:
+        service = create_crew_service(trace_id=trace_id)
+        result = service.execute_crew_with_tracking(crew_id, input_data, trace_id)
+        
+        response = jsonify(result)
+        response.headers['X-Trace-Id'] = trace_id
+        return response, 200
+        
+    except ValueError as e:
+        # HTTP error: Client error (400)
+        logger.warning(f"Validation error: {str(e)}", extra={"trace_id": trace_id})
+        return jsonify({'error': str(e)}), 400
+        
+    except Exception as e:
+        # HTTP error: Server error (500)
+        logger.error(f"Internal error: {str(e)}", extra={"trace_id": trace_id}, exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+```
+
+---
+
+### Rule 3: Consistent Error Logging
+
+**Trigger Conditions:**
+- Logging errors
+- Need consistent error logging
+
+**Standard:**
+> Warnings for client errors (400, 401, 404). Errors for server errors (500). Always include trace_id.
+
+**Implementation:**
+```python
+# Client errors: Warning level
+except ValueError as e:
+    logger.warning(
+        f"Validation error: {str(e)}",
+        extra={"trace_id": trace_id, "crew_id": crew_id}
+    )
+    return jsonify({'error': str(e)}), 400
+
+# Server errors: Error level with exc_info
+except Exception as e:
+    logger.error(
+        f"Internal error: {str(e)}",
+        extra={"trace_id": trace_id, "crew_id": crew_id},
+        exc_info=True  # Include stack trace
+    )
+    return jsonify({'error': 'Internal server error'}), 500
+```
+
+---
+
+## Error Handling Principles
+
+1. **Transaction Safety**: Always update state, even on failure
+2. **Error Separation**: Business errors in services, HTTP errors in routes
+3. **Consistent Logging**: Warnings for client errors, errors for server errors
+4. **Trace ID**: Always include trace_id in error logs
+5. **Don't Leak Internals**: Generic messages in production, details in dev
+
+---
+
+## References
+
+- See: `apps/ai-services/docs/coding-patterns.md` for error handling patterns
+- See: `apps/ai-services/docs/architectural-standards.md` for error handling standards

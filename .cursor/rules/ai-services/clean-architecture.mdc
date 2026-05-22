@@ -1,0 +1,136 @@
+---
+description: Clean architecture principles for AI services - thin API layer, service orchestration, domain logic isolation
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Clean Architecture for AI Services
+
+Enforces clean architecture principles: thin API layer, service orchestration, domain logic isolated from infrastructure, and adapters for external systems.
+
+## Core Principles
+
+### Principle 1: Thin API Layer
+
+**API routes (`app/routes/`) should be thin - only handle HTTP concerns:**
+
+**✅ Good:**
+```python
+@api_bp.route('/rag/search', methods=['POST'])
+@optional_auth
+def semantic_search():
+    """Thin route handler - delegates to service layer"""
+    data = request.get_json()
+    if not data or 'query' not in data:
+        return jsonify({'error': 'Missing required field: query'}), 400
+    
+    trace_id = request.headers.get('X-Trace-Id') or generate_trace_id()
+    result = rag_service.semantic_search(
+        query=data['query'],
+        trace_id=trace_id
+    )
+    return jsonify(result), 200
+```
+
+**Rules:**
+- Routes handle HTTP request/response only
+- Routes extract and validate input
+- Routes delegate to service layer
+- Routes propagate trace_id
+- No business logic in routes
+
+### Principle 2: Service Orchestration
+
+**Services (`app/services/`) orchestrate domain logic and coordinate adapters:**
+
+**✅ Good:**
+```python
+class RAGService:
+    def __init__(
+        self,
+        embedding_service: EmbeddingService,
+        vector_store: VectorStoreAdapter,
+        llm_service: LLMService
+    ):
+        self.embedding_service = embedding_service
+        self.vector_store = vector_store
+        self.llm_service = llm_service
+    
+    def semantic_search(self, query: str, trace_id: str):
+        with langfuse_trace(trace_id, name="semantic_search"):
+            embedding = self.embedding_service.generate_embedding(
+                query, trace_id=trace_id
+            )
+            results = self.vector_store.semantic_search(
+                embedding, trace_id=trace_id
+            )
+            return {'results': results, 'query': query}
+```
+
+**Rules:**
+- Services orchestrate workflows
+- Services coordinate between adapters
+- Services propagate trace_id to all operations
+- Services are testable (accept dependencies via constructor)
+
+### Principle 3: Domain Logic Isolation
+
+**Domain logic is isolated from infrastructure and frameworks:**
+
+**✅ Good:**
+```python
+# app/domain/rag.py - Pure domain logic
+class DocumentChunk:
+    """Domain entity - no infrastructure dependencies"""
+    def __init__(self, id: str, content: str, metadata: Dict):
+        self.id = id
+        self.content = content
+        self.metadata = metadata
+```
+
+**Rules:**
+- Domain logic has no framework dependencies
+- Domain entities are pure Python classes
+- Domain logic is testable without mocks
+
+### Principle 4: Adapters for External Systems
+
+**External systems accessed through adapter interfaces:**
+
+**✅ Good:**
+```python
+# app/adapters/vector_store.py - Adapter interface
+class VectorStoreAdapter(ABC):
+    @abstractmethod
+    def semantic_search(
+        self, query_embedding: List[float], trace_id: str
+    ) -> List[Dict]:
+        pass
+
+# app/integrations/supabase/vector_store.py - Concrete implementation
+class SupabaseVectorStoreAdapter(VectorStoreAdapter):
+    def semantic_search(self, query_embedding, trace_id: str):
+        with langfuse_trace(trace_id, name="vector_search"):
+            # Supabase-specific code
+            pass
+```
+
+**Rules:**
+- External systems accessed through adapters
+- Adapters implement abstract interfaces
+- Services depend on interfaces, not implementations
+- Adapters propagate trace_id to external calls
+
+## Checklist
+
+Before finalizing code:
+- [ ] Route is thin (HTTP concerns only)
+- [ ] Service orchestrates workflow
+- [ ] Domain logic is isolated
+- [ ] External systems accessed through adapters
+- [ ] Dependencies injected via constructor
+- [ ] trace_id propagated through all layers
+- [ ] Domain entities used (not raw dicts)
+- [ ] Repository pattern used (not direct Supabase calls)
+- [ ] Factory pattern used for service creation
+- [ ] No SPIKE code (or SPIKE code marked and refactoring ticket created)

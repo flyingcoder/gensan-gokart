@@ -1,0 +1,96 @@
+---
+description: Langfuse tracing integration - single trace_id propagation across API, workers, tools, and LLM calls
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Langfuse Tracing Integration
+
+Enforces Langfuse as the source of truth for tracing, metrics, and prompt/version tracking. Propagates a single trace_id across API, workers, tools, and LLM calls.
+
+## Core Principles
+
+### Principle 1: Single Trace ID Propagation
+
+**Every operation must propagate trace_id through all layers:**
+
+**✅ Good:**
+```python
+@api_bp.route('/rag/search', methods=['POST'])
+def semantic_search():
+    trace_id = request.headers.get('X-Trace-Id') or generate_trace_id()
+    result = rag_service.semantic_search(query=data['query'], trace_id=trace_id)
+    response = jsonify(result)
+    response.headers['X-Trace-Id'] = trace_id
+    return response
+
+class RAGService:
+    def semantic_search(self, query: str, trace_id: str):
+        with langfuse_trace(trace_id, name="semantic_search"):
+            embedding = self.embedding_service.generate_embedding(
+                query, trace_id=trace_id
+            )
+            return self.vector_store.semantic_search(embedding, trace_id=trace_id)
+```
+
+**Rules:**
+- Every function that performs work accepts `trace_id: str` parameter
+- trace_id extracted from request headers or generated at entry point
+- trace_id propagated to all service calls
+- trace_id propagated to Celery tasks
+- trace_id included in response headers
+
+### Principle 2: Langfuse as Source of Truth
+
+**All tracing, metrics, and prompt tracking goes through Langfuse:**
+
+**✅ Good:**
+```python
+class LLMService:
+    def generate_response(self, prompt: str, trace_id: str, model: str = "gpt-4"):
+        with langfuse_trace(trace_id, name="llm_generate") as trace:
+            with trace.span(name="llm_call", input={"prompt": prompt}) as span:
+                response = self.client.chat.completions.create(...)
+                result = response.choices[0].message.content
+                span.output = result
+                span.metadata = {"tokens": response.usage.total_tokens}
+                return result
+```
+
+**Rules:**
+- All LLM calls tracked in Langfuse
+- All vector operations tracked in Langfuse
+- All workflow steps tracked in Langfuse
+- Metrics collected through Langfuse
+- Prompt versions tracked in Langfuse
+
+### Principle 3: Celery Task Tracing
+
+**Celery tasks must propagate trace_id:**
+
+**✅ Good:**
+```python
+@celery_app.task(bind=True, name="rag.ingest_document")
+def ingest_document_job(self, document_id: str, trace_id: str, chunks: List[Dict]):
+    with langfuse_trace(trace_id, name="ingest_document_job") as trace:
+        result = rag_service.process_document(document_id, chunks, trace_id=trace_id)
+        trace.metadata = {"document_id": document_id, "job_id": self.request.id}
+        return result
+```
+
+**Rules:**
+- Celery tasks accept trace_id parameter
+- Tasks create Langfuse traces
+- Tasks propagate trace_id to service calls
+
+## Checklist
+
+Before finalizing code:
+- [ ] trace_id extracted/generated at entry point
+- [ ] trace_id propagated to all service calls
+- [ ] trace_id propagated to Celery tasks
+- [ ] Langfuse traces created for workflows
+- [ ] LLM calls tracked in Langfuse
+- [ ] trace_id in response headers
+- [ ] Factory functions accept trace_id parameter
+- [ ] All service methods accept trace_id parameter

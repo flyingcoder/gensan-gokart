@@ -1,0 +1,371 @@
+---
+description: Pure Vibe Coding - Lambda Engine operators integrated with Cursor for AI Services
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Pure Vibe Coding: Lambda Engine + Cursor Integration
+
+**The Vibe**: Code flows like water. Patterns emerge naturally. Contradictions become insights.
+
+**Core Philosophy**: Work backward from patterns to premises. Turn rupture into insight. Maintain productive contradiction (S* state).
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Default for stable coding tasks
+**Mode 2 (HALIRA Protocol)** - For foundational contradictions requiring paradigm shift
+
+## Controlled Rupture Operators
+
+```yaml
+coding_workflows:
+ feature_development:
+   operator_sequence: "Seed ∘ Telo ∘ Pro ∘ Kata ∘ Latch"
+   lambda_eff: 0.35
+   trajectory: "S* → J=0"
+   use_case: "Building new features with goal-directed acceleration"
+
+ debugging:
+   operator_sequence: "Retro ∘ Ana ∘ Ortho ∘ Latch"
+   lambda_eff: 0.40
+   trajectory: "S* → J=0"
+   use_case: "Debugging by working backward from errors"
+
+ refactoring:
+   operator_sequence: "Ana ∘ Weave ∘ Kata ∘ Latch"
+   lambda_eff: 0.43
+   trajectory: "S* → S* → J=0"
+   use_case: "Refactoring to improve structure"
+
+ architecture_decision:
+   operator_sequence: "Seed ∘ Axis ∘ Meta ∘ Weave ∘ Non ∘ Para ∘ Ortho ∘ Bind"
+   lambda_eff: 0.52
+   trajectory: "∅ → S* → J=0 → S* → S*"
+   use_case: "HALIRA Protocol for foundational contradictions"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+ J=0_indicators: ["definitely", "always", "never", "certain"] # Sterile coherence
+ S*_indicators: ["likely", "probably", "may", "might", "pattern", "alternative"] # Productive contradiction
+ Void_indicators: ["error", "broken", "failed", "cannot", "stuck"] # System collapse
+```
+
+## Core Guidelines
+
+### Principle 1: Work Backward from Patterns (Retro Operator)
+
+**Trigger Conditions:**
+- Block text contains: "implement" OR "create" OR "add" OR "build"
+- Starting new feature or understanding existing code
+
+**Operator Sequence: `Retro ∘ Ana ∘ Weave`**
+
+**Process:**
+1. **Retro (↶)**: Work backward from patterns
+   - Use Cursor codebase search to find existing patterns
+   - Don't accumulate forward - recognize patterns backward
+   - Trace from current code to understand patterns
+
+2. **Ana (↑)**: Elevate to understand
+   - Understand the pattern at higher level
+   - See how pattern fits in architecture
+   - Abstract to understand structure
+
+3. **Weave (🕸️)**: Integrate understanding
+   - Integrate pattern understanding into new code
+   - Use Cursor multi-file editing to integrate
+   - Create coherent implementation
+
+**Cursor Integration:**
+- Use codebase search: "How is X implemented?"
+- Use semantic search to find patterns
+- Use multi-file editing to integrate
+
+**Example:**
+```python
+# Retro: Find pattern in codebase
+# Search: "How are services created?"
+# Pattern found: Factory pattern used
+
+# Ana: Understand pattern
+# Factory creates services with dependencies injected
+# Pattern: create_{service}(trace_id=...)
+
+# Weave: Integrate into new code
+def create_new_service(trace_id: Optional[str] = None) -> NewService:
+    """Create new service following factory pattern."""
+    return NewService(
+        repository=create_repository(),
+        trace_id=trace_id
+    )
+```
+
+---
+
+### Principle 2: Goal-Directed Acceleration (Telo Operator)
+
+**Trigger Conditions:**
+- Block text contains: "goal" OR "complete" OR "finish" OR "working"
+- Clear objective, need to accelerate toward completion
+
+**Operator Sequence: `Telo ∘ Pro ∘ Kata ∘ Latch`**
+
+**Process:**
+1. **Telo (→)**: Structure toward goal
+   - Identify clear goal (e.g., "working authentication system")
+   - Each step pulls toward goal
+   - Use Cursor `/generate` for goal-directed code
+
+2. **Pro (↷)**: Forward progress
+   - Continue pattern, make progress
+   - Use tab completion to continue
+   - Maintain forward momentum
+
+3. **Kata (↓)**: Compress to essentials
+   - Remove non-essential code
+   - Compress to core functionality
+   - Use `Cmd+K` to simplify
+
+4. **Latch (🔒)**: Stabilize
+   - Lock in working code
+   - Commit when stable
+   - Mark as complete
+
+**Cursor Integration:**
+- Use `/generate` for Telo (goal-directed generation)
+- Use tab completion for Pro (forward progress)
+- Use `Cmd+K` for Kata (compress)
+- Commit for Latch (stabilize)
+
+---
+
+### Principle 3: Maintain Productive Contradiction (S* State)
+
+**Trigger Conditions:**
+- Block text contains: "probably" OR "likely" OR "may" OR "alternative"
+- Multiple perspectives considered, moderate confidence
+
+**Operator Sequence: `Weave ∘ Bind ∘ Braid`**
+
+**Process:**
+1. **Weave (🕸️)**: Integrate perspectives
+   - Hold multiple approaches simultaneously
+   - Use Cursor multi-file editing
+   - Synthesize into coherent whole
+
+2. **Bind (🔗)**: Create cohesion
+   - Connect components together
+   - Establish relationships
+   - Create structural binding
+
+3. **Braid (🌀)**: Interweave complexity
+   - Hold multiple perspectives
+   - Entangle different approaches
+   - Maintain productive tension
+
+**Cursor Integration:**
+- Use multi-file editing for Weave
+- Use interfaces for Bind
+- Hold multiple approaches for Braid
+
+---
+
+### Principle 4: Turn Rupture into Insight (Non Operator)
+
+**Trigger Conditions:**
+- Block text contains: "error" OR "bug" OR "issue" OR "problem"
+- Before accepting solution
+- Need to find flaws
+
+**Operator Sequence: `Non ∘ Ortho ∘ Latch`**
+
+**Process:**
+1. **Non (¬)**: Attack your solution
+   - Use `/attack` command in Cursor
+   - Find what breaks it
+   - Identify edge cases
+   - Challenge assumptions
+
+2. **Ortho (⊥)**: Correct flaws
+   - Fix issues found by Non
+   - Use `Cmd+.` for quick fixes
+   - Align with standards
+
+3. **Latch (🔒)**: Stabilize corrected code
+   - Lock in fixes
+   - Commit corrected code
+   - Mark as verified
+
+**Cursor Integration:**
+- Use `/attack` for Non (attack solution)
+- Use `Cmd+.` for Ortho (quick fixes)
+- Commit for Latch (stabilize)
+
+**⚠️ CRITICAL**: Always apply Non before accepting solutions. This is the engine of quality.
+
+---
+
+## Operator → Cursor Command Mapping
+
+| Operator | Cursor Command | When to Use |
+|----------|---------------|-------------|
+| **Kata** ↓ | `Cmd+K` "Simplify" | Code verbose, needs compression |
+| **Telo** → | `/generate` | Clear goal, need acceleration |
+| **Ortho** ⊥ | `Cmd+.` (Quick Fix) | Errors detected, needs correction |
+| **Pro** ↷ | Tab completion | Making progress, continue pattern |
+| **Latch** 🔒 | Commit | Code works, ready to stabilize |
+| **Ana** ↑ | Codebase search | Need to understand patterns |
+| **Para** ∥ | "Show alternatives" | Stuck, need different approach |
+| **Non** ¬ | `/attack` | Before accepting solution |
+| **Fold** ↯ | `Cmd+K` "Simplify" | Overwhelmed, emergency simplify |
+| **Flux** ⚡ | Varied searches | Exploring, discovering patterns |
+| **Meta** ⟲ | Reflect in chat | Need self-reflection |
+| **Retro** ↶ | Git history | Understanding history, debugging |
+| **Echo** 🔊 | `Cmd+D` | Replicate successful pattern |
+| **Braid** 🌀 | Multi-file edit | Multiple perspectives needed |
+| **Seed** 🌱 | Create foundation | Starting new feature |
+| **Crux** ⚡ | Identify decision | At critical decision point |
+| **Weave** 🕸️ | Multi-file edit | Integrating components |
+| **Bind** 🔗 | Create interfaces | Creating cohesion |
+| **Axis** 📍 | Understand structure | Need orientation |
+| **Vale** ⬇️ | Deep read | Need deep understanding |
+
+**⚠️ WARNING**: Vale has highest collapse risk. Always follow with stabilizing operators.
+
+---
+
+## Coding Workflows
+
+### Workflow 1: Feature Development
+
+**Sequence**: `Seed ∘ Telo ∘ Pro ∘ Kata ∘ Latch`
+
+**Process:**
+1. **Seed**: Establish foundation (create base structure)
+2. **Telo**: Goal-directed acceleration (use `/generate` toward goal)
+3. **Pro**: Forward progress (continue pattern with tab completion)
+4. **Kata**: Compress to essentials (use `Cmd+K` to simplify)
+5. **Latch**: Stabilize (commit working code)
+
+**Cursor Commands:**
+- `/generate` for Telo
+- Tab completion for Pro
+- `Cmd+K` for Kata
+- Commit for Latch
+
+---
+
+### Workflow 2: Debugging
+
+**Sequence**: `Retro ∘ Ana ∘ Ortho ∘ Latch`
+
+**Process:**
+1. **Retro**: Work backward from error (use git history, trace backward)
+2. **Ana**: Elevate to understand (use codebase search to understand pattern)
+3. **Ortho**: Correct the issue (use `Cmd+.` for quick fixes)
+4. **Latch**: Stabilize fix (commit corrected code)
+
+**Cursor Commands:**
+- Git history for Retro
+- Codebase search for Ana
+- `Cmd+.` for Ortho
+- Commit for Latch
+
+---
+
+### Workflow 3: Refactoring
+
+**Sequence**: `Ana ∘ Weave ∘ Kata ∘ Latch`
+
+**Process:**
+1. **Ana**: Elevate to understand current structure (codebase search)
+2. **Weave**: Integrate improvements (multi-file editing)
+3. **Kata**: Compress to essentials (`Cmd+K` to simplify)
+4. **Latch**: Stabilize refactored code (commit)
+
+**Cursor Commands:**
+- Codebase search for Ana
+- Multi-file edit for Weave
+- `Cmd+K` for Kata
+- Commit for Latch
+
+---
+
+## State-Specific Actions
+
+### When in J=0 State (Sterile Coherence)
+
+**Symptoms**: Over-confident, too certain, stuck in pattern
+
+**Action**: Break coherence
+- Use `Para` to explore alternatives (codebase search for alternatives)
+- Use `Ana` to elevate perspective (understand bigger picture)
+- Use `Flux` to perturb system (varied searches)
+
+**Cursor**: Use codebase search to find alternatives
+
+---
+
+### When in S* State (Productive Contradiction)
+
+**Symptoms**: Moderate confidence with uncertainty, multiple perspectives
+
+**Action**: Maintain productivity
+- Use `Weave` to integrate (multi-file editing)
+- Use `Bind` to create cohesion (interfaces)
+- Use `Braid` for complexity (hold multiple perspectives)
+
+**Cursor**: Use multi-file editing to integrate
+
+---
+
+### When in ∅ State (System Collapse)
+
+**Symptoms**: Errors everywhere, system breaking down
+
+**Action**: Emergency recovery
+- Use `Kata` to simplify (`Cmd+K` to compress)
+- Use `Weave` to integrate what works
+- Use `Latch` to stabilize (commit recovery)
+
+**Cursor**: Use `Cmd+K` to simplify, fix errors
+
+---
+
+## Guidelines
+
+### Coding Principles
+
+1. **Work Backward from Patterns**: Use Retro to find patterns, then implement
+2. **Maintain Productive Contradiction**: Keep S* state, hold multiple perspectives
+3. **Turn Rupture into Insight**: Use Non to attack solutions, find flaws
+4. **Flow, Don't Force**: Let patterns guide you, use Cursor features
+
+### Operator Selection
+
+**For Stable Coding (Mode 1):**
+- Use A-Constructive operators: Kata, Telo, Ortho, Pro, Latch
+- Use D-Structural operators: Weave, Bind, Axis
+- Avoid B-Disruptive unless breaking out of stuck patterns
+
+**For Paradigm Shifts (Mode 2):**
+- Use HALIRA Protocol: Seed → Axis → Meta → Weave → Non → Para → Ortho → Bind
+- Use B-Disruptive operators: Ana, Para, Non
+- Use C-Reflexive operators: Meta, Retro, Echo, Braid, Seed
+
+### Constraints
+
+- **Meta**: Max 2 consecutive applications
+- **Non after Meta**: FORBIDDEN (causes collapse)
+- **Vale**: Use with extreme caution, always follow with stabilizing operators
+
+---
+
+## References
+
+- See: `apps/ai-services/docs/pure-vibe-coding.md` for complete guide
+- See: `.cursor/rules/general/lambda-engine-operational.mdc` for Lambda Engine foundation
+- See: `.cursor/rules/general/operators-reference.mdc` for operator reference

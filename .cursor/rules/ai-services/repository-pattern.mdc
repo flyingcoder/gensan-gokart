@@ -1,0 +1,264 @@
+---
+description: Repository Pattern for Data Access - Abstraction layer for all data operations
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Repository Pattern for Data Access
+
+Enforces repository pattern for all data access. Prevents direct Supabase calls in services and routes.
+
+## When to Apply
+
+Apply this rule when:
+- Accessing data (database, external APIs)
+- Creating, reading, updating, deleting entities
+- Need data access abstraction
+- Writing services or routes
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable abstraction patterns
+
+## Controlled Rupture Operators
+
+```yaml
+repository_creation_sequence:
+ create_repository: "Seed ∘ Axis ∘ Weave ∘ Bind"
+ lambda_eff: 0.33
+ trajectory: "S* → S*"
+ use_case: "Create repository interface and implementation"
+
+repository_usage_sequence:
+ use_repository: "Retro ∘ Ana ∘ Weave"
+ lambda_eff: 0.49
+ trajectory: "S* → S*"
+ use_case: "Use repository in services"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+ J=0_indicators: ["get_client()", "supabase.table", "direct call"] # Direct infrastructure calls
+ S*_indicators: ["repository", "abstract", "interface", "abstraction"] # Repository pattern
+ Void_indicators: ["no abstraction", "tight coupling"] # Violation
+```
+
+## Core Guidelines
+
+### Rule 1: All Data Access Through Repositories
+
+**Trigger Conditions:**
+- Block text contains: "get_client()" OR "supabase.table" OR "supabase.table("
+- Direct Supabase client calls in services or routes
+- Data access operations
+
+**Standard:**
+> All data access goes through repository interfaces. No direct Supabase client calls in services or routes.
+
+**Operator Sequence: `Retro ∘ Ana ∘ Weave`**
+
+**Process:**
+1. **Retro (↶)**: Work backward from direct calls
+   - Find all direct Supabase calls
+   - Understand what data is being accessed
+   - Trace to understand access patterns
+
+2. **Ana (↑)**: Elevate to understand abstraction needs
+   - Understand data access requirements
+   - Identify repository interface needed
+   - Understand abstraction boundaries
+
+3. **Weave (🕸️)**: Integrate repository pattern
+   - Create repository interface
+   - Create repository implementation
+   - Refactor services to use repository
+   - Integrate into existing code
+
+**Required Pattern:**
+
+```python
+# ✅ GOOD: Repository pattern
+
+# 1. Define repository interface
+# app/repositories/execution_repository.py
+from abc import ABC, abstractmethod
+
+class ExecutionRepository(ABC):
+    """Abstract repository for crew executions."""
+    
+    @abstractmethod
+    def create(
+        self,
+        crew_id: str,
+        input_data: Dict[str, Any],
+        status: str,
+        trace_id: str
+    ) -> str:
+        """Create execution record, return execution_id."""
+        pass
+    
+    @abstractmethod
+    def update(
+        self,
+        execution_id: str,
+        status: str,
+        result: Optional[Dict[str, Any]] = None,
+        error: Optional[str] = None,
+        trace_id: str = None
+    ) -> None:
+        """Update execution record."""
+        pass
+
+# 2. Implement repository
+# app/repositories/supabase/execution_repository.py
+from app.repositories.execution_repository import ExecutionRepository
+from app.integrations.supabase.client import get_client
+
+class SupabaseExecutionRepository(ExecutionRepository):
+    """Supabase implementation of ExecutionRepository."""
+    
+    def __init__(self, client: Client):
+        self.client = client
+    
+    def create(self, crew_id: str, input_data: Dict, status: str, trace_id: str) -> str:
+        """Create execution record in Supabase."""
+        result = self.client.table('crew_executions').insert({
+            'crewId': crew_id,
+            'status': status,
+            'input': input_data,
+            'startedAt': datetime.utcnow().isoformat(),
+        }).execute()
+        
+        if not result.data:
+            raise ValueError("Failed to create execution record")
+        
+        return result.data[0]['id']
+    
+    def update(self, execution_id: str, status: str, ...) -> None:
+        """Update execution record."""
+        self.client.table('crew_executions').update({
+            'status': status,
+            'output': result,
+            'error': error,
+            'completedAt': datetime.utcnow().isoformat() if status in ['completed', 'failed'] else None
+        }).eq('id', execution_id).execute()
+
+# 3. Service uses repository
+# app/services/crew_service.py
+class CrewService:
+    def __init__(self, execution_repository: ExecutionRepository):
+        self.execution_repository = execution_repository
+    
+    def execute_crew_with_tracking(self, crew_id: str, input_data: Dict, trace_id: str):
+        # Use repository - no direct Supabase calls
+        execution_id = self.execution_repository.create(
+            crew_id=crew_id,
+            input_data=input_data,
+            status='running',
+            trace_id=trace_id
+        )
+        # ...
+```
+
+**❌ Bad: Direct Supabase calls**
+
+```python
+# ❌ Don't do this
+class CrewService:
+    def execute_crew_with_tracking(self, crew_id: str, ...):
+        # Direct Supabase call - violates architecture
+        supabase = get_client()
+        result = supabase.table('crew_executions').insert({...})
+```
+
+---
+
+### Rule 2: Repository Factory Pattern
+
+**Trigger Conditions:**
+- Creating repositories
+- Need repository instances
+
+**Standard:**
+> Repositories created through factory functions. Factory handles implementation selection.
+
+**Implementation:**
+```python
+# app/repositories/factory.py
+def create_execution_repository(
+    client: Optional[Client] = None
+) -> ExecutionRepository:
+    """Create execution repository with dependencies injected."""
+    if client is None:
+        client = get_client()
+    return SupabaseExecutionRepository(client=client)
+
+# Service factory uses repository factory
+def create_crew_service(
+    supabase_client=None,
+    trace_id: Optional[str] = None
+) -> CrewService:
+    """Create CrewService with repository injected."""
+    execution_repository = create_execution_repository(supabase_client)
+    return CrewService(execution_repository=execution_repository)
+```
+
+---
+
+### Rule 3: Repository Interface First
+
+**Trigger Conditions:**
+- Creating new data access
+- Need to abstract data operations
+
+**Standard:**
+> Define repository interface first, then implement. Services depend on interfaces, not implementations.
+
+**Process:**
+1. **Seed (🌱)**: Establish repository interface foundation
+2. **Axis (📍)**: Define repository boundaries and methods
+3. **Weave (🕸️)**: Integrate interface into services
+4. **Bind (🔗)**: Create implementation and bind to interface
+
+---
+
+## Repository Structure
+
+```
+app/
+  repositories/
+    execution_repository.py          # Interface (ABC)
+    crew_repository.py               # Interface (ABC)
+    supabase/
+      execution_repository.py        # Implementation
+      crew_repository.py             # Implementation
+    factory.py                       # Repository factory
+```
+
+---
+
+## Benefits
+
+- **Abstraction**: Services don't know about Supabase
+- **Testability**: Easy to mock repositories
+- **Flexibility**: Can swap data stores without changing services
+- **Single Responsibility**: Repositories handle data access only
+
+---
+
+## Migration Path
+
+1. **Identify direct calls**: Find all `get_client()` and `supabase.table()` calls
+2. **Create repository interface**: Define ABC for data operations
+3. **Implement repository**: Create Supabase implementation
+4. **Refactor services**: Replace direct calls with repository
+5. **Update factory**: Add repository creation to factory
+
+---
+
+## References
+
+- See: `apps/ai-services/docs/coding-patterns.md` for repository pattern details
+- See: `apps/ai-services/docs/architectural-standards.md` for architectural rules

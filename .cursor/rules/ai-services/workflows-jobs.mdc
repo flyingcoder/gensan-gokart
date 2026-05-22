@@ -1,0 +1,95 @@
+---
+description: Workflows as traceable jobs with idempotent steps - Celery task patterns
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Workflows as Traceable Jobs
+
+Treats workflows as traceable jobs with idempotent steps. Each workflow is a Celery task that can be retried, traced, and monitored.
+
+## Core Principles
+
+### Principle 1: Workflows as Jobs
+
+**Every workflow is a Celery task with trace_id:**
+
+**✅ Good:**
+```python
+@celery_app.task(bind=True, name="rag.ingest_document")
+def ingest_document_job(self, document_id: str, trace_id: str, chunks: List[Dict]):
+    with langfuse_trace(trace_id, name="ingest_document_job") as trace:
+        embeddings = generate_embeddings_step(chunks, trace_id, self.request.id)
+        result = store_embeddings_step(document_id, chunks, embeddings, trace_id, self.request.id)
+        trace.metadata = {"document_id": document_id, "chunks_processed": len(chunks)}
+        return {"success": True, "document_id": document_id, "chunks_stored": result["chunks_stored"]}
+```
+
+**Rules:**
+- Workflows are Celery tasks
+- Tasks accept trace_id parameter
+- Tasks create Langfuse traces
+- Tasks return structured results
+
+### Principle 2: Idempotent Steps
+
+**Each workflow step must be idempotent (safe to retry):**
+
+**✅ Good:**
+```python
+def generate_embeddings_step(chunks: List[Dict], trace_id: str, job_id: str):
+    with langfuse_trace(trace_id, name="generate_embeddings"):
+        embeddings = []
+        for chunk in chunks:
+            # Check if embedding already exists (idempotency)
+            existing = get_embedding_from_cache(chunk['id'], job_id)
+            if existing:
+                embeddings.append(existing)
+                continue
+            # Generate new embedding
+            embedding = embedding_service.generate_embedding(chunk['content'], trace_id)
+            cache_embedding(chunk['id'], embedding, job_id)
+            embeddings.append(embedding)
+        return embeddings
+```
+
+**Rules:**
+- Steps check for existing results before processing
+- Steps use upsert operations where possible
+- Steps cache intermediate results
+- Steps can be safely retried
+
+### Principle 3: Job State Tracking
+
+**Jobs track their state and can be queried:**
+
+**✅ Good:**
+```python
+def create_ingestion_job(document_id: str, chunks: List[Dict], trace_id: str):
+    task = ingest_document_job.delay(document_id=document_id, trace_id=trace_id, chunks=chunks)
+    client = get_client()
+    client.table('jobs').insert({
+        'id': task.id,
+        'type': 'ingest_document',
+        'document_id': document_id,
+        'trace_id': trace_id,
+        'status': 'pending'
+    }).execute()
+    return {'job_id': task.id, 'status': 'pending', 'trace_id': trace_id}
+```
+
+**Rules:**
+- Jobs stored in database with metadata
+- Job status queryable via API
+- Jobs linked to trace_id for tracing
+
+## Checklist
+
+Before finalizing workflow code:
+- [ ] Workflow is a Celery task
+- [ ] Task accepts trace_id parameter
+- [ ] Task creates Langfuse trace
+- [ ] Steps are idempotent
+- [ ] Steps can be safely retried
+- [ ] Job metadata stored in database
+- [ ] Job status queryable via API

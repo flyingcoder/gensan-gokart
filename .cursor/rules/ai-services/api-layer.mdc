@@ -1,0 +1,138 @@
+---
+description: Thin API layer patterns - routes handle HTTP only, delegate to services
+globs: ["apps/ai-services/app/routes/**/*.py"]
+alwaysApply: true
+---
+
+# Thin API Layer
+
+Enforces thin API routes that handle HTTP concerns only and delegate to service layer.
+
+## Core Principles
+
+### Principle 1: HTTP Concerns Only
+
+**Routes handle HTTP request/response, validation, and error handling:**
+
+**✅ Good:**
+```python
+@api_bp.route('/rag/search', methods=['POST'])
+@optional_auth
+def semantic_search():
+    trace_id = request.headers.get('X-Trace-Id') or generate_trace_id()
+    data = request.get_json()
+    if not data or 'query' not in data:
+        return jsonify({'error': 'Missing required field: query'}), 400
+    
+    query = data['query']
+    match_threshold = float(data.get('match_threshold', 0.7))
+    
+    try:
+        result = rag_service.semantic_search(
+            query=query, trace_id=trace_id, match_threshold=match_threshold
+        )
+        response = jsonify(result)
+        response.headers['X-Trace-Id'] = trace_id
+        return response, 200
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        logger.error(f"Error: {str(e)}", extra={"trace_id": trace_id})
+        return jsonify({'error': 'Internal server error'}), 500
+```
+
+**Rules:**
+- Routes extract and validate input
+- Routes handle HTTP errors (400, 401, 404, 500)
+- Routes extract trace_id from headers or generate
+- Routes delegate to service layer
+- Routes format HTTP responses
+- Routes include trace_id in response headers
+- No business logic in routes
+
+### Principle 2: Input Validation
+
+**Routes validate all input before delegating:**
+
+**✅ Good:**
+```python
+@api_bp.route('/rag/ingest', methods=['POST'])
+@require_auth
+def ingest_document():
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'Request body required'}), 400
+    if 'document_id' not in data:
+        return jsonify({'error': 'Missing required field: document_id'}), 400
+    if 'chunks' not in data or not isinstance(chunks, list) or not chunks:
+        return jsonify({'error': 'chunks must be a non-empty list'}), 400
+    
+    # Validate chunk structure
+    for i, chunk in enumerate(chunks):
+        if not isinstance(chunk, dict) or 'content' not in chunk:
+            return jsonify({'error': f'chunk {i} missing required field: content'}), 400
+    
+    result = rag_service.ingest_document(
+        document_id=data['document_id'],
+        chunks=data['chunks'],
+        trace_id=get_or_generate_trace_id(request)
+    )
+    return jsonify(result), 200
+```
+
+**Rules:**
+- Validate all required fields
+- Validate field types
+- Validate field formats (UUIDs, ranges, etc.)
+- Return 400 with clear error messages
+- Validate before delegating to service
+
+### Principle 3: Error Handling
+
+**Routes handle errors appropriately:**
+
+**✅ Good:**
+```python
+@api_bp.route('/rag/documents/<document_id>', methods=['GET'])
+def get_document(document_id: str):
+    trace_id = get_or_generate_trace_id(request)
+    try:
+        uuid.UUID(document_id)  # Validate UUID
+    except ValueError:
+        return jsonify({'error': 'Invalid document_id format'}), 400
+    
+    try:
+        result = rag_service.get_document(document_id=document_id, trace_id=trace_id)
+        if result is None:
+            return jsonify({'error': 'Document not found'}), 404
+        response = jsonify(result)
+        response.headers['X-Trace-Id'] = trace_id
+        return response, 200
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except NotFoundError as e:
+        return jsonify({'error': str(e)}), 404
+    except Exception as e:
+        logger.error(f"Error: {str(e)}", extra={"trace_id": trace_id})
+        return jsonify({'error': 'Internal server error'}), 500
+```
+
+**Rules:**
+- Handle specific exceptions with appropriate status codes
+- Log errors with trace_id and context
+- Return clear error messages (but don't leak internals)
+- Use 400 for client errors, 401 for auth, 404 for not found, 500 for server errors
+
+## Checklist
+
+Before finalizing route code:
+- [ ] Route handles HTTP concerns only
+- [ ] Input validation complete
+- [ ] Errors handled with appropriate status codes
+- [ ] trace_id extracted/generated
+- [ ] trace_id propagated to service
+- [ ] trace_id in response headers
+- [ ] No business logic in route
+- [ ] No direct Supabase calls (use services)
+- [ ] No direct infrastructure calls (use services)
+- [ ] Factory pattern used for service creation

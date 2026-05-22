@@ -1,0 +1,106 @@
+---
+description: Code quality principles - clarity, composability, observability over cleverness
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Code Quality Principles
+
+Enforces clarity, composability, and observability over cleverness. Code should be maintainable, reusable, and testable.
+
+## Core Principles
+
+### Principle 1: Clarity Over Cleverness
+
+**Code should be clear and readable:**
+
+**✅ Good:**
+```python
+def semantic_search(query: str, trace_id: str, threshold: float = 0.7):
+    """Clear, explicit code"""
+    embedding = embedding_service.generate_embedding(query, trace_id)
+    results = vector_store.semantic_search(embedding, threshold, trace_id)
+    return {'results': results, 'query': query, 'count': len(results)}
+```
+
+**❌ Bad:**
+```python
+def semantic_search(q, t, th=0.7):
+    """Clever but unclear"""
+    return {'r': [r for r in vs.search(es.gen(q, t), th, t)], 'q': q, 'c': len([r for r in vs.search(es.gen(q, t), th, t)])}
+```
+
+**Rules:**
+- Use descriptive variable names
+- Use descriptive function names
+- Write clear docstrings
+- Avoid clever one-liners
+- Prefer explicit over implicit
+
+### Principle 2: Composability
+
+**Code should be composable and reusable:**
+
+**✅ Good:**
+```python
+class EmbeddingService:
+    def generate_embedding(self, text: str, trace_id: str) -> List[float]:
+        """Composable - can be used independently"""
+        with langfuse_trace(trace_id, name="generate_embedding"):
+            return self.client.embeddings.create(input=text).data[0].embedding
+
+class RAGService:
+    def __init__(self, embedding_service: EmbeddingService, vector_store: VectorStoreAdapter):
+        self.embedding_service = embedding_service  # Composable dependency
+        self.vector_store = vector_store
+    
+    def semantic_search(self, query: str, trace_id: str):
+        embedding = self.embedding_service.generate_embedding(query, trace_id)
+        return self.vector_store.semantic_search(embedding, trace_id)
+```
+
+**Rules:**
+- Functions do one thing well
+- Services are composable
+- Dependencies are injectable
+- Code is reusable across contexts
+
+### Principle 3: Observability
+
+**Code should be observable and traceable:**
+
+**✅ Good:**
+```python
+def process_document(document_id: str, trace_id: str):
+    """Observable - all operations traced"""
+    with langfuse_trace(trace_id, name="process_document") as trace:
+        logger.info("Starting document processing", extra={
+            "document_id": document_id, "trace_id": trace_id
+        })
+        
+        with trace.span(name="ingest") as span:
+            result = ingest_document(document_id, trace_id)
+            span.metadata = {"chunks": result["chunks_stored"]}
+        
+        logger.info("Document processing complete", extra={
+            "document_id": document_id, "trace_id": trace_id, "chunks": result["chunks_stored"]
+        })
+        return result
+```
+
+**Rules:**
+- All operations traced in Langfuse
+- Important operations logged
+- Logs include trace_id and context
+- Errors logged with full context
+- Metrics tracked through Langfuse
+
+## Checklist
+
+Before finalizing code:
+- [ ] Code is clear and readable
+- [ ] Functions are composable
+- [ ] Operations are observable
+- [ ] Logs include trace_id
+- [ ] Errors logged with context
+- [ ] No clever but unclear code

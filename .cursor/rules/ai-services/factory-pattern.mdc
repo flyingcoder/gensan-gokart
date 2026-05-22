@@ -1,0 +1,230 @@
+---
+description: Factory Pattern Consistency - All services created through factory functions
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Factory Pattern Consistency
+
+Enforces consistent factory pattern for all service creation. Prevents inline service instantiation.
+
+## When to Apply
+
+Apply this rule when:
+- Creating services
+- Instantiating service classes
+- Need dependency injection
+- Writing routes or other services
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable factory patterns
+
+## Controlled Rupture Operators
+
+```yaml
+factory_creation_sequence:
+ create_factory: "Seed ∘ Axis ∘ Bind ∘ Latch"
+ lambda_eff: 0.31
+ trajectory: "S* → S* → J=0"
+ use_case: "Create factory function"
+
+factory_usage_sequence:
+ use_factory: "Echo ∘ Weave ∘ Latch"
+ lambda_eff: 0.35
+ trajectory: "S* → J=0"
+ use_case: "Use factory consistently"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+ J=0_indicators: ["Service()", "CrewService(", "inline creation"] # Inline instantiation
+ S*_indicators: ["create_service", "factory", "create_crew_service"] # Factory pattern
+ Void_indicators: ["mixed patterns", "inconsistent"] # Violation
+```
+
+## Core Guidelines
+
+### Rule 1: All Services Created Through Factory
+
+**Trigger Conditions:**
+- Block text contains: "Service()" OR "CrewService(" OR inline service instantiation
+- Direct class instantiation in routes or other services
+- Missing factory usage
+
+**Standard:**
+> All services created through factory functions in `app/services/factory.py`. No inline service creation in routes or other services.
+
+**Operator Sequence: `Echo ∘ Weave ∘ Latch`**
+
+**Process:**
+1. **Echo (🔊)**: Replicate factory pattern
+   - Use existing factory pattern
+   - Copy factory function structure
+   - Replicate dependency injection pattern
+
+2. **Weave (🕸️)**: Integrate factory usage
+   - Replace inline creation with factory
+   - Integrate factory calls
+   - Maintain consistency
+
+3. **Latch (🔒)**: Stabilize factory usage
+   - Lock in factory pattern
+   - Commit consistent usage
+   - Mark as production-ready
+
+**Required Pattern:**
+
+```python
+# ✅ GOOD: Factory pattern
+# app/services/factory.py
+def create_crew_service(
+    supabase_client=None,
+    trace_id: Optional[str] = None
+) -> CrewService:
+    """
+    Create CrewService with dependencies injected.
+    
+    Args:
+        supabase_client: Optional Supabase client (for testing)
+        trace_id: Optional trace ID for initialization logging
+    
+    Returns:
+        CrewService instance
+    """
+    execution_repository = create_execution_repository(supabase_client)
+    crew_repository = create_crew_repository(supabase_client)
+    
+    return CrewService(
+        execution_repository=execution_repository,
+        crew_repository=crew_repository
+    )
+
+# Route uses factory
+from app.services.factory import create_crew_service
+
+@api_bp.route('/crews/<crew_id>/execute', methods=['POST'])
+def execute_crew(crew_id: str):
+    trace_id = get_or_generate_trace_id(request)
+    
+    # Always use factory - consistent pattern
+    service = create_crew_service(trace_id=trace_id)
+    result = service.execute_crew_with_tracking(crew_id, input_data, trace_id)
+    
+    return jsonify(result), 200
+```
+
+**❌ Bad: Inline service creation**
+
+```python
+# ❌ Don't do this
+@api_bp.route('/crews/<crew_id>/execute', methods=['POST'])
+def execute_crew(crew_id: str):
+    # Inline creation - inconsistent with other routes
+    service = CrewService(supabase_client=get_client())
+    result = service.execute_crew(crew_id, input_data, trace_id)
+    return jsonify(result), 200
+```
+
+---
+
+### Rule 2: Factory Accepts Optional Dependencies
+
+**Trigger Conditions:**
+- Creating factory functions
+- Need dependency injection
+
+**Standard:**
+> Factory functions accept optional dependencies for testing. Defaults provided for production use.
+
+**Implementation:**
+```python
+def create_crew_service(
+    supabase_client=None,  # Optional for testing
+    trace_id: Optional[str] = None  # Optional for logging
+) -> CrewService:
+    """
+    Create service with optional dependencies.
+    
+    - If dependencies provided: Use for testing
+    - If not provided: Create defaults for production
+    """
+    if supabase_client is None:
+        supabase_client = get_client()
+    
+    execution_repository = create_execution_repository(supabase_client)
+    return CrewService(execution_repository=execution_repository)
+```
+
+---
+
+### Rule 3: Factory Propagates Trace ID
+
+**Trigger Conditions:**
+- Factory functions created
+- Need observability
+
+**Standard:**
+> Factory functions accept optional `trace_id` for initialization logging. Services created with trace context.
+
+**Implementation:**
+```python
+def create_crew_service(
+    supabase_client=None,
+    trace_id: Optional[str] = None
+) -> CrewService:
+    """Create service with trace_id for initialization logging."""
+    if trace_id:
+        logger.info(
+            "Creating CrewService",
+            extra={"trace_id": trace_id}
+        )
+    
+    # Create service with trace context
+    return CrewService(...)
+```
+
+---
+
+## Factory Structure
+
+```
+app/
+  services/
+    factory.py              # All factory functions
+    crew_service.py         # Service implementation
+    rag_service.py          # Service implementation
+```
+
+**Factory functions:**
+- `create_crew_service(trace_id=...) -> CrewService`
+- `create_rag_service(user_id, trace_id=...) -> RAGAnythingAdapter`
+- `create_llm_service() -> LLMService`
+- `create_execution_repository(client=...) -> ExecutionRepository`
+
+---
+
+## Benefits
+
+- **Consistency**: All services created the same way
+- **Testability**: Easy to inject mocks
+- **Configuration**: Centralized dependency configuration
+- **Traceability**: Factory can log service creation
+
+---
+
+## Migration Path
+
+1. **Identify inline creation**: Find all direct service instantiation
+2. **Create factory functions**: Add factory functions for all services
+3. **Replace inline creation**: Replace with factory calls
+4. **Verify consistency**: All routes use factory
+
+---
+
+## References
+
+- See: `apps/ai-services/docs/coding-patterns.md` for factory pattern details
+- See: `apps/ai-services/app/services/factory.py` for factory implementation

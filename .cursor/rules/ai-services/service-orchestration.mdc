@@ -1,0 +1,337 @@
+---
+description: Service Orchestration Pattern - Services orchestrate all business logic, routes are thin
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Service Orchestration Pattern
+
+Enforces service orchestration of all business logic. Routes are thin, services orchestrate.
+
+## When to Apply
+
+Apply this rule when:
+- Writing routes or services
+- Business logic detected in routes
+- Direct infrastructure calls in routes
+- Need to orchestrate workflows
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable orchestration patterns
+
+## Controlled Rupture Operators
+
+```yaml
+service_orchestration_sequence:
+ orchestrate_workflow: "Telo ∘ Weave ∘ Bind ∘ Latch"
+ lambda_eff: 0.34
+ trajectory: "S* → S* → J=0"
+ use_case: "Orchestrate business logic in services"
+
+route_thinning_sequence:
+ thin_route: "Kata ∘ Weave ∘ Latch"
+ lambda_eff: 0.32
+ trajectory: "S* → J=0"
+ use_case: "Make routes thin, delegate to services"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+ J=0_indicators: ["get_client()", "supabase.table", "business logic in route"] # Violation
+ S*_indicators: ["delegate", "service.orchestrate", "thin route"] # Correct pattern
+ Void_indicators: ["route contains logic", "bypass service"] # Violation
+```
+
+## Core Guidelines
+
+### Rule 1: Routes Are Thin (HTTP Only)
+
+**Trigger Conditions:**
+- Block text contains: "get_client()" OR "supabase.table" OR business logic in route
+- Route contains orchestration logic
+- Route creates execution records, updates state
+
+**Standard:**
+> Routes handle HTTP concerns only: input validation, error formatting, trace_id extraction. All business logic delegated to services.
+
+**Operator Sequence: `Kata ∘ Weave ∘ Latch`**
+
+**Process:**
+1. **Kata (↓)**: Compress route to essentials
+   - Remove business logic
+   - Keep only HTTP concerns
+   - Compress to thin layer
+
+2. **Weave (🕸️)**: Integrate service delegation
+   - Delegate all business logic to service
+   - Integrate service calls
+   - Maintain HTTP response formatting
+
+3. **Latch (🔒)**: Stabilize thin route
+   - Lock in thin route pattern
+   - Commit refactored route
+   - Mark as production-ready
+
+**Required Pattern:**
+
+```python
+# ✅ GOOD: Thin route, delegates to service
+@api_bp.route('/crews/<crew_id>/execute', methods=['POST'])
+@require_auth
+def execute_crew(crew_id: str):
+    """
+    Thin API layer - HTTP concerns only.
+    
+    Responsibilities:
+    - Extract and validate input
+    - Extract trace_id
+    - Delegate to service
+    - Format HTTP response
+    - Handle HTTP errors
+    """
+    # 1. Extract and validate input
+    trace_id = get_or_generate_trace_id(request)
+    data = request.get_json() or {}
+    
+    if 'input' not in data:
+        return jsonify({'error': 'Missing required field: input'}), 400
+    
+    input_data = data['input']
+    
+    # 2. Delegate ALL business logic to service
+    try:
+        service = create_crew_service(trace_id=trace_id)
+        result = service.execute_crew_with_tracking(
+            crew_id=crew_id,
+            input_data=input_data,
+            trace_id=trace_id
+        )
+        
+        # 3. Format HTTP response
+        response = jsonify(result)
+        response.headers['X-Trace-Id'] = trace_id
+        return response, 200
+        
+    except ValueError as e:
+        # 4. Handle HTTP errors
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        logger.error(f"Error: {str(e)}", extra={"trace_id": trace_id}, exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
+```
+
+**❌ Bad: Route contains business logic**
+
+```python
+# ❌ Don't do this
+@api_bp.route('/crews/<crew_id>/execute', methods=['POST'])
+def execute_crew(crew_id: str):
+    # Business logic in route - violates architecture
+    supabase = get_client()  # Direct infrastructure call
+    execution_record = supabase.table('crew_executions').insert({...})  # Business logic
+    # ... more business logic ...
+    service = create_crew_service()
+    result = service.execute_crew(crew_id, input_data, trace_id)
+    # ... more business logic ...
+    return jsonify(result)
+```
+
+---
+
+### Rule 2: Services Orchestrate All Business Logic
+
+**Trigger Conditions:**
+- Business logic in routes
+- Direct infrastructure calls in routes
+- Need to orchestrate workflows
+
+**Standard:**
+> Services orchestrate workflows, coordinate adapters, handle business rules. Services never call infrastructure directly (use repositories/adapters).
+
+**Operator Sequence: `Telo ∘ Weave ∘ Bind ∘ Latch`**
+
+**Process:**
+1. **Telo (→)**: Structure toward orchestration goal
+   - Identify orchestration goal
+   - Structure workflow steps
+   - Pull toward complete orchestration
+
+2. **Weave (🕸️)**: Integrate orchestration components
+   - Coordinate between adapters
+   - Integrate workflow steps
+   - Synthesize into coherent workflow
+
+3. **Bind (🔗)**: Create cohesive orchestration
+   - Bind workflow steps together
+   - Create structural cohesion
+   - Establish workflow boundaries
+
+4. **Latch (🔒)**: Stabilize orchestration
+   - Lock in orchestrated workflow
+   - Commit service orchestration
+   - Mark as production-ready
+
+**Required Pattern:**
+
+```python
+# ✅ GOOD: Service orchestrates all business logic
+class CrewService:
+    def __init__(
+        self,
+        execution_repository: ExecutionRepository,
+        crew_repository: CrewRepository
+    ):
+        self.execution_repository = execution_repository
+        self.crew_repository = crew_repository
+    
+    def execute_crew_with_tracking(
+        self,
+        crew_id: str,
+        input_data: Dict[str, Any],
+        trace_id: str
+    ) -> Dict[str, Any]:
+        """
+        Execute crew and handle all tracking/state management.
+        
+        Service orchestrates:
+        - Creating execution record
+        - Executing crew
+        - Storing results
+        - Updating crew stats
+        - Error handling
+        """
+        with langfuse_trace(trace_id, name="execute_crew_with_tracking"):
+            # Orchestrate: Create execution record
+            execution_id = self.execution_repository.create(
+                crew_id=crew_id,
+                input_data=input_data,
+                status='running',
+                trace_id=trace_id
+            )
+            
+            try:
+                # Orchestrate: Execute crew
+                result = self.execute_crew(crew_id, input_data, trace_id)
+                
+                # Orchestrate: Store successful result
+                self.execution_repository.update(
+                    execution_id=execution_id,
+                    status='completed',
+                    result=result,
+                    error=None,
+                    trace_id=trace_id
+                )
+                
+                # Orchestrate: Update crew stats
+                self.crew_repository.increment_execution_count(crew_id, trace_id)
+                
+                return {
+                    'success': True,
+                    'execution_id': execution_id,
+                    'result': result
+                }
+                
+            except Exception as e:
+                # Orchestrate: Store failed execution
+                self.execution_repository.update(
+                    execution_id=execution_id,
+                    status='failed',
+                    result={},
+                    error=str(e),
+                    trace_id=trace_id
+                )
+                raise
+```
+
+---
+
+### Rule 3: No Direct Infrastructure Calls in Routes
+
+**Trigger Conditions:**
+- `get_client()` in route
+- `supabase.table()` in route
+- Direct database calls in route
+
+**Standard:**
+> Routes never call infrastructure directly. All infrastructure access through services.
+
+**Detection Pattern:**
+```python
+# ❌ Violation detected
+@api_bp.route('/endpoint', methods=['POST'])
+def endpoint():
+    supabase = get_client()  # ❌ Direct infrastructure call
+    result = supabase.table('table').select('*').execute()  # ❌ Direct call
+```
+
+**Action**: Refactor to delegate to service
+
+---
+
+## Route Responsibilities (Thin Layer)
+
+**Routes Should:**
+- ✅ Extract request data
+- ✅ Validate input format (not business rules)
+- ✅ Extract/generate trace_id
+- ✅ Delegate to service
+- ✅ Format HTTP response
+- ✅ Handle HTTP status codes
+- ✅ Include trace_id in response headers
+
+**Routes Should NOT:**
+- ❌ Call database directly
+- ❌ Contain business logic
+- ❌ Orchestrate multiple services
+- ❌ Handle complex error recovery
+- ❌ Make external API calls
+- ❌ Create execution records
+- ❌ Update state directly
+
+---
+
+## Service Responsibilities (Orchestration Layer)
+
+**Services Should:**
+- ✅ Orchestrate workflows
+- ✅ Coordinate between adapters
+- ✅ Handle business rules
+- ✅ Use repositories for data access
+- ✅ Propagate trace_id to all operations
+- ✅ Handle transaction safety
+- ✅ Manage error recovery
+
+**Services Should NOT:**
+- ❌ Call infrastructure directly (use repositories)
+- ❌ Handle HTTP concerns
+- ❌ Format HTTP responses
+- ❌ Extract request data
+
+---
+
+## Benefits
+
+- **Separation of Concerns**: Routes handle HTTP, services handle business
+- **Testability**: Services testable without HTTP layer
+- **Reusability**: Services can be used by other interfaces (CLI, workers)
+- **Maintainability**: Business logic centralized in services
+
+---
+
+## Migration Path
+
+1. **Identify violations**: Find business logic in routes
+2. **Extract to service**: Move logic to service methods
+3. **Create orchestration**: Service orchestrates workflow
+4. **Thin routes**: Routes delegate to services
+5. **Verify**: Routes are thin, services orchestrate
+
+---
+
+## References
+
+- See: `apps/ai-services/docs/coding-patterns.md` for service orchestration patterns
+- See: `.cursor/rules/ai-services/api-layer.mdc` for API layer rules

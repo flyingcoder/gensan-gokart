@@ -1,0 +1,227 @@
+---
+description: SPIKE to Production Transition Rules - Prevent SPIKE code from becoming production code
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# SPIKE to Production Transition Rules
+
+Prevents SPIKE code from becoming production code. Enforces refactoring phase.
+
+## When to Apply
+
+Apply this rule when:
+- SPIKE code is detected (comments, patterns, time-boxed development)
+- Code marked with "SPIKE" comment
+- Quick implementations that need refactoring
+- Time-boxed exploration code
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable refactoring patterns
+
+## Controlled Rupture Operators
+
+```yaml
+spike_detection_sequence:
+ detect_spike: "Seed ∘ Ana ∘ Non"
+ lambda_eff: 0.64
+ trajectory: "S* → S*"
+ use_case: "Detect SPIKE code and violations"
+
+spike_refactoring_sequence:
+ refactor_spike: "Ana ∘ Weave ∘ Kata ∘ Latch"
+ lambda_eff: 0.43
+ trajectory: "S* → S* → J=0"
+ use_case: "Refactor SPIKE code to production standards"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+ J=0_indicators: ["spike", "quick", "temporary", "hack", "todo"] # SPIKE code detected
+ S*_indicators: ["refactor", "production", "stable", "complete"] # Production code
+ Void_indicators: ["spike in production", "spike never refactored"] # Violation
+```
+
+## Core Guidelines
+
+### Rule 1: SPIKE Code Must Be Refactored Before Production
+
+**Trigger Conditions:**
+- Block text contains: "SPIKE" OR "spike" OR "# SPIKE:"
+- File contains SPIKE comments
+- Code marked as temporary/quick implementation
+
+**Standard:**
+> All SPIKE code must be refactored to match architectural standards before being merged to production. SPIKE code is explicitly marked and cannot remain in production codebase.
+
+**Operator Sequence: `Ana ∘ Weave ∘ Kata ∘ Latch`**
+
+**Process:**
+1. **Ana (↑)**: Elevate to understand SPIKE code
+   - Understand what SPIKE code does
+   - Identify architectural violations
+   - Understand intended production pattern
+
+2. **Weave (🕸️)**: Integrate SPIKE functionality into production structure
+   - Refactor to use domain entities
+   - Refactor to use repositories
+   - Refactor to use services properly
+   - Integrate with existing patterns
+
+3. **Kata (↓)**: Compress to production essentials
+   - Remove SPIKE-specific code
+   - Compress to clean architecture patterns
+   - Remove temporary workarounds
+
+4. **Latch (🔒)**: Stabilize refactored code
+   - Lock in production-ready code
+   - Remove SPIKE markers
+   - Commit as production code
+
+**Required Actions:**
+- Mark SPIKE code with `# SPIKE: [description]` comment
+- Create refactoring ticket before merging SPIKE code
+- Refactoring must be completed within 1 sprint
+- No SPIKE code in `main` branch
+
+**Example:**
+```python
+# ❌ BAD: SPIKE code in production
+def execute_crew(crew_id: str):
+    # SPIKE: Quick implementation, needs refactoring
+    supabase = get_client()  # Direct call - violates architecture
+    result = supabase.table('crews').select('*').eq('id', crew_id).execute()
+    return result.data
+
+# ✅ GOOD: Refactored to production standards
+def execute_crew(crew_id: str, trace_id: str):
+    """Execute crew using service layer - production ready."""
+    service = create_crew_service(trace_id=trace_id)
+    return service.execute_crew(crew_id, trace_id)
+```
+
+---
+
+### Rule 2: Time-Box SPIKE Development
+
+**Trigger Conditions:**
+- Block text contains: "time-box" OR "spike" OR "exploration"
+- Development marked as time-limited
+
+**Standard:**
+> SPIKE development is time-boxed (max 3 days). After time-box expires, either refactor to production or discard SPIKE code.
+
+**Implementation:**
+- SPIKE tickets must have explicit time-box (e.g., "3 days")
+- After time-box, SPIKE code is either:
+  - Refactored to production standards, OR
+  - Discarded and re-implemented properly
+- No extensions to SPIKE time-box
+
+**Why:**
+- **Root Cause Addressed**: Time pressure / MVP mindset
+- **Problem**: SPIKE code lingered, became permanent, never refactored
+- **Solution**: Force decision point - refactor or discard
+
+---
+
+### Rule 3: SPIKE Code Must Be Isolated
+
+**Trigger Conditions:**
+- SPIKE code detected
+- Need to isolate from production
+
+**Standard:**
+> SPIKE code must be in separate branch or feature flag. Never mix SPIKE code with production code in same file.
+
+**Implementation:**
+- SPIKE code in `spike/` directory or `spike-*` branch
+- Feature flags for SPIKE features: `if SPIKE_MODE: ...`
+- Clear separation from production code
+- Easy to remove SPIKE code without affecting production
+
+**Why:**
+- **Root Cause Addressed**: SPIKE code became production code
+- **Problem**: SPIKE code mixed with production, hard to remove
+- **Solution**: Physical separation makes removal easy
+
+---
+
+## SPIKE Detection Patterns
+
+### Pattern 1: SPIKE Comments
+
+**Detection:**
+```python
+# SPIKE: Quick implementation
+# SPIKE: Needs refactoring
+# For SPIKE: Return empty list
+```
+
+**Action**: Mark for refactoring, create ticket
+
+---
+
+### Pattern 2: Direct Infrastructure Calls
+
+**Detection:**
+```python
+# SPIKE pattern: Direct Supabase calls
+supabase = get_client()
+result = supabase.table('crews').select('*').execute()
+```
+
+**Action**: Refactor to use repository pattern
+
+---
+
+### Pattern 3: Raw Dicts/JSON
+
+**Detection:**
+```python
+# SPIKE pattern: Raw dicts instead of domain entities
+def process(data: Dict[str, Any]) -> Dict[str, Any]:
+    return {"result": data.get("value")}
+```
+
+**Action**: Refactor to use domain entities
+
+---
+
+### Pattern 4: Inline Service Creation
+
+**Detection:**
+```python
+# SPIKE pattern: Inline service creation
+service = CrewService(supabase_client=get_client())
+```
+
+**Action**: Refactor to use factory pattern
+
+---
+
+## Refactoring Checklist
+
+Before merging SPIKE code to production:
+
+- [ ] SPIKE markers removed
+- [ ] Uses domain entities (not raw dicts)
+- [ ] Uses repository pattern (not direct Supabase calls)
+- [ ] Uses factory pattern (not inline creation)
+- [ ] Routes are thin (delegate to services)
+- [ ] Services orchestrate business logic
+- [ ] Trace ID propagated everywhere
+- [ ] Error handling transaction-safe
+- [ ] Follows architectural standards
+- [ ] Tests added/updated
+
+---
+
+## References
+
+- See: `apps/ai-services/docs/architectural-standards.md` for SPIKE transition rules
+- See: `apps/ai-services/docs/root-cause-analysis.md` for root cause analysis
+- See: `apps/ai-services/docs/coding-patterns.md` for refactoring patterns

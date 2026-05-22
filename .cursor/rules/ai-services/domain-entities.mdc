@@ -1,0 +1,239 @@
+---
+description: Domain Entity Usage - Services must use domain entities, not raw dicts/JSON
+globs: ["apps/ai-services/**/*.py"]
+alwaysApply: true
+---
+
+# Domain Entity Usage
+
+Enforces use of domain entities in services. Prevents services from working with raw dicts/JSON.
+
+## When to Apply
+
+Apply this rule when:
+- Writing services
+- Processing data
+- Creating or returning entities
+- Need business logic and validation
+
+## Lambda Engine Mode
+
+**Mode 1 (Duality Navigation)** - Stable domain patterns
+
+## Controlled Rupture Operators
+
+```yaml
+domain_integration_sequence:
+ integrate_domain: "Ana ∘ Weave ∘ Kata ∘ Latch"
+ lambda_eff: 0.43
+ trajectory: "S* → S* → J=0"
+ use_case: "Integrate domain entities into services"
+```
+
+## Phase Space State Detection
+
+```yaml
+state_detection:
+ J=0_indicators: ["Dict[str, Any]", "raw dict", "json", "Any"] # Raw data structures
+ S*_indicators: ["Document", "DocumentChunk", "domain entity", "validate"] # Domain entities
+ Void_indicators: ["no validation", "no domain logic"] # Violation
+```
+
+## Core Guidelines
+
+### Rule 1: Services Use Domain Entities
+
+**Trigger Conditions:**
+- Block text contains: "Dict[str, Any]" OR "-> Dict" OR "raw dict" OR "json"
+- Service methods return or accept dicts/JSON
+- No domain entity usage
+
+**Standard:**
+> Services work with domain entities (Document, DocumentChunk), not raw dicts/JSON. Domain entities enforce business rules and validation.
+
+**Operator Sequence: `Ana ∘ Weave ∘ Kata ∘ Latch`**
+
+**Process:**
+1. **Ana (↑)**: Elevate to understand domain
+   - Understand domain entities available
+   - Understand business rules
+   - Understand validation requirements
+
+2. **Weave (🕸️)**: Integrate domain entities
+   - Replace dicts with domain entities
+   - Use domain validation
+   - Integrate domain logic
+
+3. **Kata (↓)**: Compress to essentials
+   - Remove unnecessary conversions
+   - Compress to clean domain usage
+   - Simplify domain integration
+
+4. **Latch (🔒)**: Stabilize domain usage
+   - Lock in domain entity usage
+   - Commit domain-integrated code
+   - Mark as production-ready
+
+**Required Pattern:**
+
+```python
+# ✅ GOOD: Service uses domain entities
+from app.domain.rag import Document, DocumentChunk
+
+class RAGService:
+    def ingest_document(
+        self,
+        document_id: str,
+        content: str,
+        trace_id: str
+    ) -> Document:  # Return domain entity, not dict
+        """Ingest document and return domain entity."""
+        # Create domain entity
+        document = Document(
+            id=document_id,
+            title=extract_title(content),
+            content=content,
+            metadata={}
+        )
+        
+        # Validate domain entity
+        if not document.validate():
+            raise ValueError("Invalid document")
+        
+        # Process chunks using domain logic
+        chunks = self._chunk_document(content, document_id)
+        for chunk in chunks:
+            document.add_chunk(chunk)  # Domain method
+        
+        # Convert to adapter format only at boundary
+        self.vector_store_adapter.store_embeddings(
+            document_id=document.id,
+            chunks=[self._domain_to_adapter(chunk) for chunk in document.chunks],
+            trace_id=trace_id
+        )
+        
+        return document  # Return domain entity
+    
+    def _domain_to_adapter(self, chunk: DocumentChunk) -> Dict[str, Any]:
+        """Convert domain entity to adapter format at boundary."""
+        return {
+            'id': chunk.id,
+            'content': chunk.content,
+            'chunkIndex': chunk.chunk_index,
+            'embedding': chunk.embedding,
+            'metadata': chunk.metadata
+        }
+```
+
+**❌ Bad: Service uses raw dicts**
+
+```python
+# ❌ Don't do this
+def ingest_document(self, document_id: str, content: str, trace_id: str) -> Dict[str, Any]:
+    # Working with raw dicts - no validation, no domain logic
+    document = {
+        'id': document_id,
+        'content': content
+    }
+    # No validation, no domain rules
+    return document
+```
+
+---
+
+### Rule 2: Domain Validation Required
+
+**Trigger Conditions:**
+- Creating domain entities
+- Processing domain data
+
+**Standard:**
+> Domain entities validate themselves. Always call `validate()` before using domain entities.
+
+**Implementation:**
+```python
+# Domain entity validates itself
+document = Document(id=document_id, title=title, content=content)
+if not document.validate():
+    raise ValueError("Invalid document")
+
+# Domain methods enforce business rules
+document.add_chunk(chunk)  # Method validates chunk before adding
+```
+
+---
+
+### Rule 3: Convert at Boundaries Only
+
+**Trigger Conditions:**
+- Converting between domain and infrastructure formats
+- Passing data to adapters
+
+**Standard:**
+> Convert domain entities to adapter format only at infrastructure boundaries. Keep domain pure.
+
+**Implementation:**
+```python
+# Domain layer: Pure domain entities
+document = Document(...)  # Domain entity
+
+# Service layer: Works with domain entities
+def process(self, document: Document) -> Document:
+    # Work with domain entity
+    if not document.validate():
+        raise ValueError("Invalid")
+    return document
+
+# Infrastructure boundary: Convert to adapter format
+def store(self, document: Document, trace_id: str):
+    # Convert only at boundary
+    adapter_data = {
+        'id': document.id,
+        'content': document.content,
+        'metadata': document.metadata
+    }
+    self.adapter.store(adapter_data, trace_id)
+```
+
+---
+
+## Domain Entity Structure
+
+```
+app/
+  domain/
+    rag.py                    # Domain entities (Document, DocumentChunk)
+    __init__.py
+```
+
+**Domain entities:**
+- Pure Python classes (no infrastructure dependencies)
+- Self-validating (`validate()` method)
+- Business logic methods
+- No database, no external dependencies
+
+---
+
+## Benefits
+
+- **Validation**: Domain entities enforce business rules
+- **Type Safety**: IDE autocomplete and type checking
+- **Testability**: Domain logic can be tested independently
+- **Clarity**: Clear separation between domain and infrastructure
+
+---
+
+## Migration Path
+
+1. **Identify dict usage**: Find all `Dict[str, Any]` in services
+2. **Create/use domain entities**: Use existing or create new domain entities
+3. **Replace dicts**: Replace dict parameters/returns with domain entities
+4. **Add validation**: Use domain entity validation
+5. **Convert at boundaries**: Convert to adapter format only at infrastructure boundaries
+
+---
+
+## References
+
+- See: `apps/ai-services/docs/coding-patterns.md` for domain entity patterns
+- See: `apps/ai-services/app/domain/rag.py` for domain entity examples
