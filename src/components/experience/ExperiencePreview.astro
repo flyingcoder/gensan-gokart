@@ -1,0 +1,48 @@
+---
+const features = [
+  {
+    icon: '🏎️',
+    title: 'Off-Road Dirt Racing',
+    desc: 'Feel the grip of real dirt tracks. Corners, jumps, and raw speed — not a sterile circuit.',
+  },
+  {
+    icon: '👨‍👩‍👧‍👦',
+    title: 'Family Bonding',
+    desc: 'Safe for beginners and young riders. Create memories your family will replay forever.',
+  },
+  {
+    icon: '🤝',
+    title: 'Barkada Challenge',
+    desc: 'Race your crew. Trash-talk freely. Settle it on the track like adults.',
+  },
+  {
+    icon: '🏆',
+    title: 'Team Building',
+    desc: 'Corporate event or company outing? Nothing builds teamwork faster than competing together.',
+  },
+];
+---
+
+<section class="bg-gradient-to-b from-brand-dark to-[#1f0d09] py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="experience-heading">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">What You'll Experience</span>
+      <h2 id="experience-heading" class="font-display font-black text-brand-cream uppercase mt-2 text-4xl md:text-5xl leading-none">
+        Built for Every<br />
+        <span class="text-brand-yellow">Rider Type</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {features.map(({ icon, title, desc }) => (
+        <div class="group relative bg-brand-red-dark/20 border border-brand-red/20 hover:border-brand-orange/40 rounded-2xl p-6 transition-all duration-300 hover:bg-brand-red/20 hover:-translate-y-1">
+          <div class="text-4xl mb-4">{icon}</div>
+          <h3 class="font-display font-bold text-brand-yellow uppercase text-xl leading-tight mb-2">{title}</h3>
+          <p class="text-brand-cream/65 text-sm leading-relaxed">{desc}</p>
+          <!-- hover glow line -->
+          <div class="absolute bottom-0 left-6 right-6 h-px bg-brand-orange opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

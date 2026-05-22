@@ -1,0 +1,80 @@
+---
+---
+
+<section
+  class="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-dark"
+  aria-labelledby="hero-heading"
+>
+  <!-- Atmospheric background -->
+  <div class="absolute inset-0" aria-hidden="true">
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-red-dark via-brand-dark to-[#1a0505]"></div>
+    <!-- Decorative track lines -->
+    <div class="absolute inset-0 opacity-10"
+      style="background-image: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,105,26,0.3) 40px, rgba(255,105,26,0.3) 41px);">
+    </div>
+    <!-- Glow burst -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-20"
+      style="background: radial-gradient(circle, #FF6A1A 0%, #A80E0E 40%, transparent 70%);">
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 pb-16">
+    <!-- Badge -->
+    <div class="inline-flex items-center gap-2 bg-brand-red/30 border border-brand-orange/30 rounded-full px-4 py-1.5 mb-6">
+      <span class="inline-block w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+      <span class="text-brand-orange font-semibold text-sm tracking-wide uppercase">General Santos City</span>
+    </div>
+
+    <!-- Headline -->
+    <h1
+      id="hero-heading"
+      class="font-display font-black uppercase text-brand-cream leading-none mb-4"
+      style="font-size: var(--text-hero);"
+    >
+      General Santos'<br />
+      <span class="text-brand-yellow" style="text-shadow: 0 0 40px rgba(255,201,40,0.4);">
+        Wildest Off-Road
+      </span><br />
+      Go-Kart Track
+    </h1>
+
+    <p class="text-brand-cream/75 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+      Dirt. Speed. Adrenaline. Built for families, barkada trips, and team challenges.
+      No experience needed — just the guts to ride.
+    </p>
+
+    <!-- CTAs -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a
+        href="/booking"
+        class="inline-flex items-center justify-center gap-2 bg-action-blue hover:bg-action-blue-hover text-white font-bold text-lg px-8 py-4 rounded transition-all duration-150 shadow-[0_0_30px_rgba(31,169,255,0.3)] hover:shadow-[0_0_40px_rgba(31,169,255,0.5)]"
+        onclick="gtag?.('event','book_now_click',{location:'hero'})"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+        Book Your Ride
+      </a>
+      <a
+        href="/packages"
+        class="inline-flex items-center justify-center gap-2 border-2 border-brand-yellow/50 hover:border-brand-yellow text-brand-yellow font-bold text-lg px-8 py-4 rounded transition-colors duration-150"
+        onclick="gtag?.('event','view_packages_click',{location:'hero'})"
+      >
+        View Promos
+      </a>
+    </div>
+
+    <!-- Social proof -->
+    <p class="mt-8 text-brand-muted text-sm">
+      Join hundreds of riders in GenSan's #1 off-road go-kart experience
+    </p>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" aria-hidden="true">
+    <svg class="w-6 h-6 text-brand-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    </svg>
+  </div>
+</section>

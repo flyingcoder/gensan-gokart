@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  --color-red-deep: #A80E0E;
+  --color-red-burnt: #7E0A0A;
+  --color-orange: #FF6A1A;
+  --color-yellow: #FFC928;
+  --color-dark: #2A120D;
+  --color-white: #FFFFFF;
+  --color-cream: #FFF4E8;
+  --color-charcoal: #221815;
+  --color-muted: #6E625D;
+  --color-blue: #1FA9FF;
+  --color-blue-hover: #0077CC;
+  --color-blue-glow: #8FDBFF;
+
+  --text-base: clamp(1rem, 0.92rem + 0.4vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.6vw, 1.375rem);
+  --text-xl: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+  --text-2xl: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  --text-hero: clamp(2.5rem, 1rem + 6vw, 5.5rem);
+
+  --space-section: clamp(4rem, 3rem + 5vw, 8rem);
+
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme {
+  --color-brand-red: #A80E0E;
+  --color-brand-red-dark: #7E0A0A;
+  --color-brand-orange: #FF6A1A;
+  --color-brand-yellow: #FFC928;
+  --color-brand-dark: #2A120D;
+  --color-brand-cream: #FFF4E8;
+  --color-brand-charcoal: #221815;
+  --color-brand-muted: #6E625D;
+  --color-action-blue: #1FA9FF;
+  --color-action-blue-hover: #0077CC;
+  --font-family-display: 'Barlow Condensed', 'Impact', sans-serif;
+  --font-family-body: 'Inter', system-ui, sans-serif;
+}

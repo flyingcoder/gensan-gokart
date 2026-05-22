@@ -1,0 +1,106 @@
+---
+import '../styles/tokens.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+}
+
+const {
+  title = 'GenSan GoKart — Off-Road Go-Kart Experience in General Santos City',
+  description = 'Experience the thrill of off-road go-karting in General Santos City. Family, barkada, and team-building packages available. Book your ride today!',
+  ogImage = '/og-image.jpg',
+  canonical = Astro.url.href,
+} = Astro.props;
+
+const ga4Id = import.meta.env.PUBLIC_GA4_MEASUREMENT_ID;
+const pixelId = import.meta.env.PUBLIC_META_PIXEL_ID;
+
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'GenSan GoKart',
+  description: 'Off-road go-kart experience in General Santos City, Philippines.',
+  url: 'https://gensangokart.com',
+  sameAs: [
+    'https://www.facebook.com/gensangokart',
+    'https://www.instagram.com/gensangokart',
+  ],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'General Santos City',
+    addressRegion: 'SOCCSKSARGEN',
+    addressCountry: 'PH',
+  },
+  telephone: '',
+  openingHours: 'Mo-Su 08:00-20:00',
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="GenSan GoKart" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <title>{title}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+
+    <!-- GA4 -->
+    {ga4Id && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+        <script define:vars={{ ga4Id }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', ga4Id);
+        </script>
+      </>
+    )}
+
+    <!-- Meta Pixel -->
+    {pixelId && (
+      <script define:vars={{ pixelId }}>
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+        document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', pixelId);
+        fbq('track', 'PageView');
+      </script>
+    )}
+  </head>
+  <body class="bg-brand-dark text-brand-cream font-body antialiased">
+    <slot />
+  </body>
+</html>

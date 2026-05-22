@@ -1,0 +1,115 @@
+---
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/packages', label: 'Packages' },
+  { href: '/about', label: 'Experience' },
+  { href: '/events', label: 'Events' },
+  { href: '/blog', label: 'News' },
+  { href: '/contact', label: 'Contact' },
+];
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/95 backdrop-blur-sm border-b border-brand-red/20">
+  <nav aria-label="Main navigation" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 group">
+        <span class="text-brand-yellow font-display font-black text-2xl tracking-tight leading-none uppercase">
+          GenSan
+        </span>
+        <span class="bg-action-blue text-white font-display font-black text-sm px-2 py-0.5 rounded uppercase tracking-widest">
+          GoKart
+        </span>
+      </a>
+
+      <!-- Desktop nav -->
+      <ul class="hidden md:flex items-center gap-1" role="list">
+        {navLinks.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class={`px-3 py-2 rounded text-sm font-medium transition-colors duration-150 ${
+                currentPath === href
+                  ? 'text-brand-yellow bg-brand-red/20'
+                  : 'text-brand-cream/80 hover:text-brand-yellow hover:bg-brand-red/10'
+              }`}
+              aria-current={currentPath === href ? 'page' : undefined}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <!-- Book CTA -->
+      <a
+        href="/booking"
+        class="hidden md:inline-flex items-center gap-2 bg-action-blue hover:bg-action-blue-hover text-white font-semibold text-sm px-4 py-2 rounded transition-colors duration-150"
+        onclick="gtag?.('event','book_now_click',{location:'nav'})"
+      >
+        Book Now
+      </a>
+
+      <!-- Mobile hamburger -->
+      <button
+        id="mobile-menu-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Toggle navigation menu"
+        class="md:hidden p-2 text-brand-cream hover:text-brand-yellow transition-colors"
+      >
+        <svg id="icon-open" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4" role="region" aria-label="Mobile navigation">
+      <ul class="flex flex-col gap-1" role="list">
+        {navLinks.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class={`block px-3 py-2 rounded text-sm font-medium transition-colors ${
+                currentPath === href
+                  ? 'text-brand-yellow bg-brand-red/20'
+                  : 'text-brand-cream/80 hover:text-brand-yellow'
+              }`}
+              aria-current={currentPath === href ? 'page' : undefined}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+        <li class="pt-2">
+          <a
+            href="/booking"
+            class="block text-center bg-action-blue hover:bg-action-blue-hover text-white font-semibold text-sm px-4 py-2 rounded transition-colors"
+          >
+            Book Now
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.contains('hidden');
+    menu?.classList.toggle('hidden', !isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    iconOpen?.classList.toggle('hidden', isOpen ?? false);
+    iconClose?.classList.toggle('hidden', !(isOpen ?? false));
+  });
+</script>
