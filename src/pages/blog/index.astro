@@ -37,10 +37,10 @@ const posts = (await getCollection('blog').catch(() => [])).sort(
                 <article class="bg-brand-red-dark/15 border border-brand-red/20 hover:border-brand-orange/40 rounded-2xl p-6 transition-colors">
                   <p class="text-brand-muted text-xs mb-2">{post.data.pubDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                   <h2 class="font-display font-bold text-brand-cream uppercase text-2xl leading-tight mb-2">
-                    <a href={`/blog/${post.slug}`} class="hover:text-brand-yellow transition-colors">{post.data.title}</a>
+                    <a href={`/blog/${post.id}`} class="hover:text-brand-yellow transition-colors">{post.data.title}</a>
                   </h2>
                   <p class="text-brand-cream/60 text-sm leading-relaxed mb-4">{post.data.excerpt}</p>
-                  <a href={`/blog/${post.slug}`} class="text-action-blue hover:underline text-sm font-semibold">Read More →</a>
+                  <a href={`/blog/${post.id}`} class="text-action-blue hover:underline text-sm font-semibold">Read More →</a>
                 </article>
               </li>
             ))}

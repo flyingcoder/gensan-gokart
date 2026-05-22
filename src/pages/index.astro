@@ -42,7 +42,7 @@ const faqSchema = {
               <p class="text-brand-muted text-xs mb-2">{latestPost.data.pubDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
               <h2 id="announcement-heading" class="font-display font-bold text-brand-cream text-2xl uppercase leading-tight mb-2">{latestPost.data.title}</h2>
               <p class="text-brand-cream/65 text-sm leading-relaxed mb-4">{latestPost.data.excerpt}</p>
-              <a href={`/blog/${latestPost.slug}`} class="text-action-blue hover:underline text-sm font-semibold">Read More →</a>
+              <a href={`/blog/${latestPost.id}`} class="text-action-blue hover:underline text-sm font-semibold">Read More →</a>
             </div>
           </div>
         </div>
