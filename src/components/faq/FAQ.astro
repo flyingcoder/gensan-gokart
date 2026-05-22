@@ -1,4 +1,9 @@
 ---
+interface Props {
+  inline?: boolean;
+}
+const { inline = false } = Astro.props;
+
 const faqs = [
   {
     q: 'Is it safe?',
@@ -10,7 +15,7 @@ const faqs = [
   },
   {
     q: 'What should riders wear?',
-    a: 'Wear comfortable clothing that you don\'t mind getting dirty. Closed-toe shoes are required — sandals and flip-flops are not allowed on the track. We recommend long pants for extra comfort.',
+    a: "Wear comfortable clothing that you don't mind getting dirty. Closed-toe shoes are required — sandals and flip-flops are not allowed on the track. We recommend long pants for extra comfort.",
   },
   {
     q: 'Is booking required?',
@@ -23,23 +28,19 @@ const faqs = [
 ];
 ---
 
-<section class="bg-brand-dark py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="faq-heading">
-  <div class="max-w-3xl mx-auto">
-    <div class="text-center mb-12">
+{inline ? (
+  <div>
+    <div class="mb-6">
       <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Common Questions</span>
-      <h2 id="faq-heading" class="font-display font-black text-brand-cream uppercase mt-2 text-4xl md:text-5xl leading-none">
+      <h2 class="font-display font-black text-brand-cream uppercase mt-1 text-3xl leading-none">
         Safety & <span class="text-brand-yellow">FAQ</span>
       </h2>
     </div>
-
     <div class="space-y-3" role="list">
       {faqs.map(({ q, a }, i) => (
-        <div
-          class="border border-brand-red/20 rounded-xl overflow-hidden bg-brand-red-dark/10"
-          role="listitem"
-        >
+        <div class="border border-brand-red/20 rounded-xl overflow-hidden bg-brand-red-dark/10" role="listitem">
           <button
-            class="w-full flex items-center justify-between gap-4 px-6 py-4 text-left text-brand-cream font-semibold hover:text-brand-yellow transition-colors duration-150 group"
+            class="w-full flex items-center justify-between gap-4 px-5 py-3.5 text-left text-brand-cream font-semibold hover:text-brand-yellow transition-colors duration-150"
             aria-expanded="false"
             aria-controls={`faq-answer-${i}`}
             id={`faq-btn-${i}`}
@@ -51,31 +52,60 @@ const faqs = [
               answer.hidden = expanded;
               const icon = btn.querySelector('[data-icon]');
               icon.style.transform = expanded ? 'rotate(0deg)' : 'rotate(45deg)';
-              gtag?.('event','faq_expand',{question:'${q.replace(/'/g, "\\'")}'});
+              gtag?.('event','faq_expand',{question:'${q.replace(/'/g, "\'")}'});
             `}
           >
-            <span>{q}</span>
-            <svg
-              data-icon
-              class="w-5 h-5 flex-shrink-0 text-brand-orange transition-transform duration-200"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
+            <span class="text-sm">{q}</span>
+            <svg data-icon class="w-4 h-4 flex-shrink-0 text-brand-orange transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
           </button>
-          <div
-            id={`faq-answer-${i}`}
-            role="region"
-            aria-labelledby={`faq-btn-${i}`}
-            hidden
-          >
-            <p class="px-6 pb-5 text-brand-cream/65 text-sm leading-relaxed">{a}</p>
+          <div id={`faq-answer-${i}`} role="region" aria-labelledby={`faq-btn-${i}`} hidden>
+            <p class="px-5 pb-4 text-brand-cream/65 text-xs leading-relaxed">{a}</p>
           </div>
         </div>
       ))}
     </div>
   </div>
-</section>
+) : (
+  <section class="bg-brand-dark py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="faq-heading">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-12">
+        <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Common Questions</span>
+        <h2 id="faq-heading" class="font-display font-black text-brand-cream uppercase mt-2 text-4xl md:text-5xl leading-none">
+          Safety & <span class="text-brand-yellow">FAQ</span>
+        </h2>
+      </div>
+      <div class="space-y-3" role="list">
+        {faqs.map(({ q, a }, i) => (
+          <div class="border border-brand-red/20 rounded-xl overflow-hidden bg-brand-red-dark/10" role="listitem">
+            <button
+              class="w-full flex items-center justify-between gap-4 px-6 py-4 text-left text-brand-cream font-semibold hover:text-brand-yellow transition-colors duration-150 group"
+              aria-expanded="false"
+              aria-controls={`faq-answer-${i}`}
+              id={`faq-btn-${i}`}
+              onclick={`
+                const btn = this;
+                const answer = document.getElementById('faq-answer-${i}');
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                btn.setAttribute('aria-expanded', String(!expanded));
+                answer.hidden = expanded;
+                const icon = btn.querySelector('[data-icon]');
+                icon.style.transform = expanded ? 'rotate(0deg)' : 'rotate(45deg)';
+                gtag?.('event','faq_expand',{question:'${q.replace(/'/g, "\'")}'});
+              `}
+            >
+              <span>{q}</span>
+              <svg data-icon class="w-5 h-5 flex-shrink-0 text-brand-orange transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+            </button>
+            <div id={`faq-answer-${i}`} role="region" aria-labelledby={`faq-btn-${i}`} hidden>
+              <p class="px-6 pb-5 text-brand-cream/65 text-sm leading-relaxed">{a}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

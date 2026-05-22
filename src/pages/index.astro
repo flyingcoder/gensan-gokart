@@ -33,24 +33,6 @@ const faqSchema = {
     <ExperiencePreview />
     <PackagesPreview />
 
-    {latestPost && (
-      <section class="bg-brand-dark py-16 px-4 sm:px-6 lg:px-8" aria-labelledby="announcement-heading">
-        <div class="max-w-4xl mx-auto">
-          <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Latest Announcement</span>
-          <div class="mt-4 flex flex-col md:flex-row gap-6 bg-brand-red-dark/20 border border-brand-red/20 rounded-2xl overflow-hidden">
-            <div class="p-6 flex-1">
-              <p class="text-brand-muted text-xs mb-2">{latestPost.data.pubDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-              <h2 id="announcement-heading" class="font-display font-bold text-brand-cream text-2xl uppercase leading-tight mb-2">{latestPost.data.title}</h2>
-              <p class="text-brand-cream/65 text-sm leading-relaxed mb-4">{latestPost.data.excerpt}</p>
-              <a href={`/blog/${latestPost.id}`} class="text-action-blue hover:underline text-sm font-semibold">Read More →</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    )}
-
-    <FAQ />
-
     <section class="bg-gradient-to-b from-brand-dark to-[#1a0808] py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="booking-form-heading">
       <div class="max-w-2xl mx-auto">
         <div class="text-center mb-10">
@@ -61,6 +43,32 @@ const faqSchema = {
           <p class="text-brand-muted mt-2 text-sm">Fill in the form and we'll confirm your booking shortly.</p>
         </div>
         <BookingForm inline />
+      </div>
+    </section>
+
+    <section class="bg-brand-dark py-16 px-4 sm:px-6 lg:px-8" aria-label="Announcement and FAQ">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        <!-- Latest Announcement -->
+        <div>
+          {latestPost ? (
+            <>
+              <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Latest Announcement</span>
+              <div class="mt-4 bg-brand-red-dark/20 border border-brand-red/20 rounded-2xl p-6">
+                <p class="text-brand-muted text-xs mb-2">{latestPost.data.pubDate.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                <h2 id="announcement-heading" class="font-display font-bold text-brand-cream text-2xl uppercase leading-tight mb-2">{latestPost.data.title}</h2>
+                <p class="text-brand-cream/65 text-sm leading-relaxed mb-4">{latestPost.data.excerpt}</p>
+                <a href={`/blog/${latestPost.id}`} class="text-action-blue hover:underline text-sm font-semibold">Read More →</a>
+              </div>
+            </>
+          ) : (
+            <div class="bg-brand-red-dark/20 border border-brand-red/20 rounded-2xl p-6">
+              <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Latest Announcement</span>
+              <p class="text-brand-muted text-sm mt-3">No announcements yet. Follow us on Facebook for updates.</p>
+            </div>
+          )}
+        </div>
+        <!-- FAQ -->
+        <FAQ inline />
       </div>
     </section>
   </main>
