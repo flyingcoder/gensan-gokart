@@ -44,9 +44,192 @@ const packages = [
       {packages.map(({ id, label, pax, tagline, inclusions, badge }) => (
         <div class="relative flex flex-col bg-brand-dark border border-brand-red/20 hover:border-brand-orange/40 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 group">
           <!-- Badge -->
-          <div class="absolute top-4 right-4">
-            <span class="bg-brand-red text-brand-cream text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">{badge}</span>
+          <div class="absolute top-4 right-4 z-10">
+            <span class="bg-brand-red text-brand-cream text-xs font-bold px-2 py-1 rounded uppercase tracking-wide shadow-lg">{badge}</span>
           </div>
+
+          <!-- Visual area -->
+          {id === 'family' && (
+            <div class="relative h-[140px] overflow-hidden" aria-hidden="true">
+              <svg viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" class="w-full h-full block">
+                <defs>
+                  <linearGradient id="family-bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#FF8A3D"/>
+                    <stop offset="55%" stop-color="#FF6A1A"/>
+                    <stop offset="100%" stop-color="#C84A0E"/>
+                  </linearGradient>
+                  <radialGradient id="family-sun" cx="0.85" cy="0.15" r="0.6">
+                    <stop offset="0%" stop-color="#FFC928" stop-opacity="0.55"/>
+                    <stop offset="100%" stop-color="#FFC928" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <rect width="400" height="140" fill="url(#family-bg)"/>
+                <rect width="400" height="140" fill="url(#family-sun)"/>
+                <!-- Distant hills -->
+                <path d="M0,105 Q80,80 160,95 T320,90 T400,100 L400,140 L0,140 Z" fill="#2A120D" fill-opacity="0.18"/>
+                <!-- Track ground -->
+                <rect x="0" y="115" width="400" height="25" fill="#2A120D" fill-opacity="0.35"/>
+                <g stroke="#FFC928" stroke-width="2" stroke-dasharray="14 10" stroke-opacity="0.7">
+                  <line x1="0" y1="128" x2="400" y2="128"/>
+                </g>
+                <!-- Family silhouettes behind kart -->
+                <g fill="#2A120D" fill-opacity="0.85">
+                  <!-- Adult 1 -->
+                  <circle cx="80" cy="58" r="9"/>
+                  <path d="M68,72 Q80,66 92,72 L94,110 L86,110 L84,86 L82,110 L78,110 L76,86 L74,110 L66,110 Z"/>
+                  <!-- Child -->
+                  <circle cx="108" cy="68" r="6.5"/>
+                  <path d="M99,79 Q108,74 117,79 L118,110 L112,110 L110,92 L108,110 L106,92 L104,110 L98,110 Z"/>
+                  <!-- Adult 2 -->
+                  <circle cx="132" cy="55" r="9.5"/>
+                  <path d="M119,70 Q132,64 145,70 L147,110 L139,110 L137,84 L135,110 L131,110 L129,84 L127,110 L119,110 Z"/>
+                </g>
+                <!-- Go-kart -->
+                <g transform="translate(210,60)">
+                  <path d="M5,40 L25,22 L95,22 L120,30 L145,30 L150,42 L145,52 L20,52 L5,48 Z" fill="#2A120D"/>
+                  <path d="M15,40 L30,28 L90,28 L115,34 L142,34 L146,42 L140,46 L25,46 L15,44 Z" fill="#FFC928"/>
+                  <path d="M55,28 L55,12 Q55,6 62,6 L82,6 Q88,6 88,12 L88,28 Z" fill="#2A120D"/>
+                  <rect x="95" y="14" width="22" height="14" rx="2" fill="#FFFFFF"/>
+                  <text x="106" y="25" font-family="Arial Black, sans-serif" font-size="11" font-weight="900" text-anchor="middle" fill="#2A120D">01</text>
+                  <circle cx="30" cy="56" r="14" fill="#2A120D"/>
+                  <circle cx="30" cy="56" r="6" fill="#3A1B14"/>
+                  <circle cx="125" cy="56" r="14" fill="#2A120D"/>
+                  <circle cx="125" cy="56" r="6" fill="#3A1B14"/>
+                  <line x1="62" y1="14" x2="50" y2="32" stroke="#2A120D" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="50" cy="32" r="5" fill="#2A120D"/>
+                </g>
+              </svg>
+            </div>
+          )}
+
+          {id === 'barkadahan' && (
+            <div class="relative h-[140px] overflow-hidden" aria-hidden="true">
+              <svg viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" class="w-full h-full block">
+                <defs>
+                  <linearGradient id="bark-bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#FFD954"/>
+                    <stop offset="55%" stop-color="#FFC928"/>
+                    <stop offset="100%" stop-color="#E89C00"/>
+                  </linearGradient>
+                </defs>
+                <rect width="400" height="140" fill="url(#bark-bg)"/>
+                <!-- Speed lines -->
+                <g stroke="#FFFFFF" stroke-opacity="0.55" stroke-linecap="round">
+                  <line x1="0" y1="30" x2="60" y2="30" stroke-width="3"/>
+                  <line x1="0" y1="48" x2="90" y2="48" stroke-width="2"/>
+                  <line x1="0" y1="68" x2="50" y2="68" stroke-width="3"/>
+                  <line x1="0" y1="88" x2="110" y2="88" stroke-width="2"/>
+                  <line x1="0" y1="108" x2="70" y2="108" stroke-width="3"/>
+                  <line x1="80" y1="20" x2="140" y2="20" stroke-width="2"/>
+                  <line x1="180" y1="38" x2="230" y2="38" stroke-width="2"/>
+                </g>
+                <!-- Track ground -->
+                <rect x="0" y="115" width="400" height="25" fill="#2A120D" fill-opacity="0.4"/>
+                <g stroke="#FFFFFF" stroke-width="2" stroke-dasharray="14 10" stroke-opacity="0.85">
+                  <line x1="0" y1="128" x2="400" y2="128"/>
+                </g>
+                <!-- Three go-karts racing -->
+                <g transform="translate(40,72)">
+                  <path d="M4,28 L18,16 L62,16 L78,22 L96,22 L100,30 L95,38 L14,38 L4,34 Z" fill="#2A120D"/>
+                  <path d="M11,28 L22,20 L60,20 L76,24 L96,26 L97,30 L92,32 L18,32 L11,30 Z" fill="#1FA9FF"/>
+                  <path d="M36,20 L36,8 Q36,4 41,4 L54,4 Q58,4 58,8 L58,20 Z" fill="#2A120D"/>
+                  <circle cx="20" cy="42" r="10" fill="#2A120D"/>
+                  <circle cx="20" cy="42" r="4" fill="#3A1B14"/>
+                  <circle cx="82" cy="42" r="10" fill="#2A120D"/>
+                  <circle cx="82" cy="42" r="4" fill="#3A1B14"/>
+                </g>
+                <g transform="translate(160,52)">
+                  <path d="M5,34 L20,18 L70,18 L88,24 L108,24 L113,34 L108,44 L16,44 L5,40 Z" fill="#2A120D"/>
+                  <path d="M13,34 L24,22 L68,22 L86,28 L108,30 L109,34 L104,38 L20,38 L13,36 Z" fill="#FF6A1A"/>
+                  <path d="M40,22 L40,8 Q40,3 46,3 L62,3 Q67,3 67,8 L67,22 Z" fill="#2A120D"/>
+                  <rect x="74" y="14" width="18" height="11" rx="2" fill="#FFFFFF"/>
+                  <text x="83" y="23" font-family="Arial Black, sans-serif" font-size="9" font-weight="900" text-anchor="middle" fill="#2A120D">07</text>
+                  <circle cx="22" cy="48" r="12" fill="#2A120D"/>
+                  <circle cx="22" cy="48" r="5" fill="#3A1B14"/>
+                  <circle cx="94" cy="48" r="12" fill="#2A120D"/>
+                  <circle cx="94" cy="48" r="5" fill="#3A1B14"/>
+                </g>
+                <g transform="translate(260,38)">
+                  <path d="M5,38 L22,20 L78,20 L98,26 L120,26 L126,38 L120,50 L18,50 L5,46 Z" fill="#2A120D"/>
+                  <path d="M14,38 L26,24 L76,24 L96,30 L120,32 L121,38 L116,42 L22,42 L14,40 Z" fill="#E63946"/>
+                  <path d="M44,24 L44,8 Q44,3 50,3 L68,3 Q73,3 73,8 L73,24 Z" fill="#2A120D"/>
+                  <rect x="80" y="14" width="22" height="14" rx="2" fill="#FFFFFF"/>
+                  <text x="91" y="25" font-family="Arial Black, sans-serif" font-size="11" font-weight="900" text-anchor="middle" fill="#2A120D">01</text>
+                  <circle cx="26" cy="54" r="14" fill="#2A120D"/>
+                  <circle cx="26" cy="54" r="6" fill="#3A1B14"/>
+                  <circle cx="108" cy="54" r="14" fill="#2A120D"/>
+                  <circle cx="108" cy="54" r="6" fill="#3A1B14"/>
+                  <circle cx="58" cy="14" r="6" fill="#FFC928"/>
+                </g>
+              </svg>
+            </div>
+          )}
+
+          {id === 'team-building' && (
+            <div class="relative h-[140px] overflow-hidden" aria-hidden="true">
+              <svg viewBox="0 0 400 140" preserveAspectRatio="xMidYMid slice" class="w-full h-full block">
+                <defs>
+                  <linearGradient id="team-bg" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#4FC3FF"/>
+                    <stop offset="55%" stop-color="#1FA9FF"/>
+                    <stop offset="100%" stop-color="#0E6EB8"/>
+                  </linearGradient>
+                  <pattern id="team-checker" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
+                    <rect width="14" height="14" fill="#FFFFFF"/>
+                    <rect width="7" height="7" fill="#2A120D"/>
+                    <rect x="7" y="7" width="7" height="7" fill="#2A120D"/>
+                  </pattern>
+                </defs>
+                <rect width="400" height="140" fill="url(#team-bg)"/>
+                <!-- Sparkle highlights -->
+                <g fill="#FFFFFF" fill-opacity="0.35">
+                  <circle cx="50" cy="22" r="2"/>
+                  <circle cx="120" cy="14" r="1.5"/>
+                  <circle cx="220" cy="22" r="2"/>
+                  <circle cx="320" cy="16" r="1.5"/>
+                  <circle cx="370" cy="30" r="2"/>
+                </g>
+                <!-- Track ground -->
+                <rect x="0" y="115" width="400" height="25" fill="#2A120D" fill-opacity="0.4"/>
+                <g stroke="#FFC928" stroke-width="2" stroke-dasharray="14 10" stroke-opacity="0.85">
+                  <line x1="0" y1="128" x2="400" y2="128"/>
+                </g>
+                <!-- Checkered flag (left) -->
+                <g transform="translate(30,24)">
+                  <line x1="2" y1="0" x2="2" y2="92" stroke="#2A120D" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M4,2 L72,2 Q66,18 72,34 L4,34 Z" fill="url(#team-checker)" stroke="#2A120D" stroke-width="1.5"/>
+                  <path d="M4,34 Q10,42 4,50 L60,50 Q56,42 60,34 Z" fill="url(#team-checker)" stroke="#2A120D" stroke-width="1.5"/>
+                </g>
+                <!-- Trophy (right) -->
+                <g transform="translate(290,18)">
+                  <path d="M6,18 Q-6,22 -6,38 Q-6,52 10,52" fill="none" stroke="#FFC928" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M62,18 Q74,22 74,38 Q74,52 58,52" fill="none" stroke="#FFC928" stroke-width="4" stroke-linecap="round"/>
+                  <path d="M6,12 L62,12 L58,52 Q58,66 34,66 Q10,66 10,52 Z" fill="#FFC928" stroke="#2A120D" stroke-width="2"/>
+                  <rect x="4" y="8" width="60" height="8" rx="2" fill="#FFE07A" stroke="#2A120D" stroke-width="2"/>
+                  <path d="M34,28 L37,36 L46,36 L39,41 L42,49 L34,44 L26,49 L29,41 L22,36 L31,36 Z" fill="#FF6A1A"/>
+                  <rect x="22" y="66" width="24" height="6" fill="#2A120D"/>
+                  <rect x="14" y="72" width="40" height="10" rx="2" fill="#2A120D"/>
+                  <path d="M14,18 L18,18 L20,50 L16,50 Z" fill="#FFFFFF" fill-opacity="0.45"/>
+                </g>
+                <!-- Go-kart center -->
+                <g transform="translate(130,58)">
+                  <path d="M5,40 L25,22 L95,22 L120,30 L145,30 L150,42 L145,52 L20,52 L5,48 Z" fill="#2A120D"/>
+                  <path d="M15,40 L30,28 L90,28 L115,34 L142,34 L146,42 L140,46 L25,46 L15,44 Z" fill="#FFFFFF"/>
+                  <path d="M55,28 L55,12 Q55,6 62,6 L82,6 Q88,6 88,12 L88,28 Z" fill="#2A120D"/>
+                  <rect x="95" y="14" width="22" height="14" rx="2" fill="#FF6A1A"/>
+                  <text x="106" y="25" font-family="Arial Black, sans-serif" font-size="11" font-weight="900" text-anchor="middle" fill="#FFFFFF">#1</text>
+                  <circle cx="30" cy="56" r="14" fill="#2A120D"/>
+                  <circle cx="30" cy="56" r="6" fill="#3A1B14"/>
+                  <circle cx="125" cy="56" r="14" fill="#2A120D"/>
+                  <circle cx="125" cy="56" r="6" fill="#3A1B14"/>
+                  <line x1="62" y1="14" x2="50" y2="32" stroke="#2A120D" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="50" cy="32" r="5" fill="#2A120D"/>
+                  <circle cx="72" cy="14" r="7" fill="#1FA9FF" stroke="#2A120D" stroke-width="1.5"/>
+                </g>
+              </svg>
+            </div>
+          )}
+
           <!-- Header -->
           <div class="bg-gradient-to-r from-brand-red-dark to-brand-dark p-6 pb-4">
             <p class="text-brand-orange text-xs font-semibold uppercase tracking-widest mb-1">{pax}</p>
