@@ -35,9 +35,11 @@ Packages: Family (3–6 pax), Barkadahan (7–10 pax), Team Building (10+ pax)
 ## Environment variables (Netlify dashboard only — never commit)
 
 - `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY` (Netlify Functions only)
+- `SUPABASE_PUBLISHABLE_KEY` (replaces service role key — use for client-side and Netlify Functions)
 - `GA4_MEASUREMENT_ID`
 - `META_PIXEL_ID`
+
+> Supabase no longer uses `SUPABASE_SERVICE_ROLE_KEY`. Use `SUPABASE_PUBLISHABLE_KEY` or a direct connection string. Rely on RLS policies for row-level security.
 
 ## Social links
 
