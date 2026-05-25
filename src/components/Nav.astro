@@ -1,4 +1,6 @@
 ---
+import logoSrc from '../assets/images/logo-with-text.png';
+
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/packages', label: 'Packages' },
@@ -14,13 +16,16 @@ const currentPath = Astro.url.pathname;
   <nav aria-label="Main navigation" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-2 group">
-        <span class="text-brand-yellow font-display font-black text-2xl tracking-tight leading-none uppercase">
-          GenSan
-        </span>
-        <span class="bg-action-blue text-white font-display font-black text-sm px-2 py-0.5 rounded uppercase tracking-widest">
-          GoKart
-        </span>
+      <a href="/" class="flex items-center group">
+        <img
+          src={logoSrc.src}
+          alt="GenSan GoKart"
+          width={logoSrc.width}
+          height={logoSrc.height}
+          class="h-10 w-auto object-contain"
+          loading="eager"
+          fetchpriority="high"
+        />
       </a>
 
       <!-- Desktop nav -->

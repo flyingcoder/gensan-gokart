@@ -1,4 +1,6 @@
 ---
+import packagesBg from '../../assets/images/gsgk-bg-image.jpg';
+
 const packages = [
   {
     id: 'family',
@@ -30,19 +32,31 @@ const packages = [
 ];
 ---
 
-<section class="bg-[#1a0808] py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="packages-heading">
-  <div class="max-w-7xl mx-auto">
+<section class="relative overflow-hidden py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="packages-heading">
+  <!-- Background photo -->
+  <img
+    src={packagesBg.src}
+    alt=""
+    width={packagesBg.width}
+    height={packagesBg.height}
+    class="absolute inset-0 w-full h-full object-cover object-center"
+    loading="lazy"
+  />
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-brand-dark/80"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto">
     <div class="text-center mb-12">
       <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">Choose Your Package</span>
       <h2 id="packages-heading" class="font-display font-black text-brand-cream uppercase mt-2 text-4xl md:text-5xl leading-none">
         Promo <span class="text-brand-yellow">Packages</span>
       </h2>
-      <p class="text-brand-muted mt-3 max-w-xl mx-auto">Something for everyone — whether you're bringing the family, the barkada, or the whole team.</p>
+      <p class="text-brand-cream/65 mt-3 max-w-xl mx-auto">Something for everyone — whether you're bringing the family, the barkada, or the whole team.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       {packages.map(({ id, label, pax, tagline, inclusions, badge }) => (
-        <div class="relative flex flex-col bg-brand-dark border border-brand-red/20 hover:border-brand-orange/40 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 group">
+        <div class="relative flex flex-col bg-white border border-gray-200 hover:border-brand-orange/60 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md group">
           <!-- Badge -->
           <div class="absolute top-4 right-4 z-10">
             <span class="bg-brand-red text-brand-cream text-xs font-bold px-2 py-1 rounded uppercase tracking-wide shadow-lg">{badge}</span>
@@ -240,7 +254,7 @@ const packages = [
           <div class="flex-1 p-6">
             <ul class="space-y-2">
               {inclusions.map((item) => (
-                <li class="flex items-start gap-2 text-sm text-brand-cream/75">
+                <li class="flex items-start gap-2 text-sm text-brand-charcoal/80">
                   <svg class="w-4 h-4 text-brand-orange flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
@@ -264,7 +278,7 @@ const packages = [
     </div>
 
     <div class="text-center">
-      <a href="/packages" class="text-action-blue hover:text-action-blue-hover font-semibold text-sm underline underline-offset-4 transition-colors">
+      <a href="/packages" class="text-brand-cream hover:text-brand-yellow font-semibold text-sm underline underline-offset-4 transition-colors">
         View Full Package Details →
       </a>
     </div>

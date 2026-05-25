@@ -23,22 +23,22 @@ const features = [
 ];
 ---
 
-<section class="bg-gradient-to-b from-brand-dark to-[#1f0d09] py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="experience-heading">
+<section class="bg-[#ffa712] py-20 px-4 sm:px-6 lg:px-8" aria-labelledby="experience-heading">
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-12">
-      <span class="text-brand-orange text-sm font-semibold uppercase tracking-widest">What You'll Experience</span>
-      <h2 id="experience-heading" class="font-display font-black text-brand-cream uppercase mt-2 text-4xl md:text-5xl leading-none">
+      <span class="text-brand-dark text-sm font-semibold uppercase tracking-widest">What You'll Experience</span>
+      <h2 id="experience-heading" class="font-display font-black text-[#f83a27] uppercase mt-2 text-4xl md:text-5xl leading-none">
         Built for Every<br />
-        <span class="text-brand-yellow">Rider Type</span>
+        <span class="text-white">Rider Type</span>
       </h2>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {features.map(({ id, title, desc }) => (
-        <div class="exp-card group relative overflow-hidden bg-brand-red-dark/20 border border-brand-red/20 hover:border-brand-orange/40 rounded-2xl p-6 transition-all duration-300 hover:bg-brand-red/20 hover:-translate-y-1">
+        <div class="exp-card group relative overflow-hidden bg-[#250f0b] border border-white/10 hover:border-brand-orange rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 shadow-md hover:shadow-lg">
           <div class="relative w-20 h-20 mb-5 flex items-center justify-center" aria-hidden="true">
-            <span class="absolute inset-0 rounded-full bg-brand-orange/25 blur-md"></span>
-            <span class="absolute inset-2 rounded-full bg-brand-orange/15"></span>
+            <span class="absolute inset-0 rounded-full bg-brand-orange/40"></span>
+            <span class="absolute inset-2 rounded-full bg-brand-orange/25"></span>
             <div class="relative w-12 h-12 text-brand-orange">
               {id === 'dirt' && (
                 <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
@@ -85,7 +85,7 @@ const features = [
                     <line x1="2" y1="32" x2="16" y2="32" opacity="0.8" />
                     <line x1="4" y1="44" x2="14" y2="44" opacity="0.6" />
                   </g>
-                  <line x1="22" y1="8" x2="22" y2="58" stroke="#2A120D" stroke-width="2.5" stroke-linecap="round" />
+                  <line x1="22" y1="8" x2="22" y2="58" stroke="#7a3520" stroke-width="2.5" stroke-linecap="round" />
                   <g>
                     <rect x="24" y="10" width="8" height="8" fill="#FFF4E8" />
                     <rect x="32" y="10" width="8" height="8" fill="#2A120D" />
@@ -109,7 +109,7 @@ const features = [
                   <path d="M22 12 C16 12, 14 18, 18 22" stroke="#FF6A1A" stroke-width="2" fill="none" stroke-linecap="round" />
                   <path d="M42 12 C48 12, 50 18, 46 22" stroke="#FF6A1A" stroke-width="2" fill="none" stroke-linecap="round" />
                   <line x1="26" y1="14" x2="38" y2="14" stroke="#FF6A1A" stroke-width="1.5" />
-                  <line x1="26" y1="18" x2="38" y2="18" stroke="#2A120D" stroke-width="1.5" />
+                  <line x1="26" y1="18" x2="38" y2="18" stroke="#7a3520" stroke-width="1.5" />
                   <rect x="30" y="36" width="4" height="6" fill="#FF6A1A" />
                   <rect x="24" y="42" width="16" height="16" fill="#FF6A1A" />
                   <text x="32" y="54" font-family="Arial Black, sans-serif" font-size="10" font-weight="900" text-anchor="middle" fill="#FFF4E8">1</text>
@@ -120,7 +120,7 @@ const features = [
             </div>
           </div>
           <h3 class="font-display font-bold text-brand-yellow uppercase text-xl leading-tight mb-2">{title}</h3>
-          <p class="text-brand-cream/65 text-sm leading-relaxed">{desc}</p>
+          <p class="text-brand-cream/85 text-sm leading-relaxed">{desc}</p>
           <span class="exp-stripe absolute bottom-0 left-0 h-[3px] bg-brand-orange"></span>
         </div>
       ))}

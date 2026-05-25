@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Rush Driver';
+  src: url('../assets/fonts/rush-driver-Italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   --color-red-deep: #A80E0E;
   --color-red-burnt: #7E0A0A;
@@ -28,10 +36,11 @@
 }
 
 @theme {
-  --color-brand-red: #A80E0E;
+  --color-brand-red: #f83a27;
   --color-brand-red-dark: #7E0A0A;
   --color-brand-orange: #FF6A1A;
   --color-brand-yellow: #FFC928;
+  --color-brand-dirt: #ffa712;
   --color-brand-dark: #2A120D;
   --color-brand-cream: #FFF4E8;
   --color-brand-charcoal: #221815;
@@ -40,4 +49,10 @@
   --color-action-blue-hover: #0077CC;
   --font-family-display: 'Barlow Condensed', 'Impact', sans-serif;
   --font-family-body: 'Inter', system-ui, sans-serif;
+  --font-family-heading: 'Rush Driver', 'Barlow Condensed', sans-serif;
+}
+
+h1 {
+  font-family: var(--font-family-heading);
+  font-style: italic;
 }

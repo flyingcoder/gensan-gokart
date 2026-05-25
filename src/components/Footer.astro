@@ -1,9 +1,22 @@
 ---
+import footBg from '../assets/images/gsgk-foot-bg-dirt.jpg';
+import logoSrc from '../assets/images/logo-with-text.png';
 const year = new Date().getFullYear();
 ---
 
-<footer class="bg-[#1a0a07] border-t border-brand-red/30 pt-12 pb-6">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<footer class="relative overflow-hidden border-t border-brand-red/30 pt-12 pb-6">
+  <!-- Background photo -->
+  <img
+    src={footBg.src}
+    alt=""
+    width={footBg.width}
+    height={footBg.height}
+    class="absolute inset-0 w-full h-full object-cover object-center"
+    loading="lazy"
+  />
+  <!-- Dark overlay so text stays readable -->
+  <div class="absolute inset-0 bg-brand-dark/85"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- CTA banner -->
     <div class="text-center mb-10">
       <p class="font-display text-brand-yellow text-3xl md:text-4xl font-black uppercase tracking-tight mb-4">
@@ -33,9 +46,15 @@ const year = new Date().getFullYear();
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
       <!-- Brand -->
       <div>
-        <div class="flex items-center gap-2 mb-3">
-          <span class="font-display font-black text-brand-yellow text-xl uppercase">GenSan</span>
-          <span class="bg-action-blue text-white font-display font-black text-xs px-2 py-0.5 rounded uppercase tracking-widest">GoKart</span>
+        <div class="mb-3">
+          <img
+            src={logoSrc.src}
+            alt="GenSan GoKart"
+            width={logoSrc.width}
+            height={logoSrc.height}
+            class="h-10 w-auto object-contain"
+            loading="lazy"
+          />
         </div>
         <p class="text-brand-muted text-sm leading-relaxed">
           General Santos City's premier off-road go-kart experience. Family-friendly, beginner-safe, adrenaline-guaranteed.

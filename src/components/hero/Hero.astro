@@ -1,4 +1,5 @@
 ---
+import heroBg from '../../assets/images/gsgk-bg-full-hero.jpg';
 ---
 
 <section
@@ -7,8 +8,19 @@
 >
   <!-- Atmospheric background -->
   <div class="absolute inset-0" aria-hidden="true">
-    <!-- Base gradient -->
-    <div class="absolute inset-0 bg-gradient-to-br from-brand-red-dark via-brand-dark to-[#1a0505]"></div>
+    <!-- Hero photo -->
+    <img
+      src={heroBg.src}
+      alt=""
+      width={heroBg.width}
+      height={heroBg.height}
+      class="absolute inset-0 w-full h-full object-cover object-center"
+      loading="eager"
+      fetchpriority="high"
+    />
+
+    <!-- Base gradient overlay (darkens photo and applies brand tone) -->
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-red-dark/80 via-brand-dark/70 to-[#1a0505]/90"></div>
 
     <!-- Diagonal speed hatching -->
     <div class="absolute inset-0 opacity-[0.12]"
@@ -68,11 +80,11 @@
       <!-- Headline -->
       <h1
         id="hero-heading"
-        class="font-display font-black uppercase text-brand-cream leading-none mb-4"
+        class="font-display font-black uppercase text-brand-dirt leading-none mb-4"
         style="font-size: var(--text-hero);"
       >
         General Santos'<br />
-        <span class="text-brand-yellow" style="text-shadow: 0 0 40px rgba(255,201,40,0.45), 0 0 80px rgba(255,106,26,0.25);">
+        <span class="text-brand-red">
           Wildest Off-Road
         </span><br />
         Go-Kart Track
